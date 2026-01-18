@@ -1,0 +1,6 @@
+---
+- name: Network status
+  hosts: all
+  tasks:
+    - name: Pinging all the servers
+      ping:
