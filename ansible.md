@@ -180,6 +180,9 @@ ansible-playbook --syntax-check playbook.yml
 # Dry run mode
 ansible-playbook -C playbook.yml
 
+# Verbose mode
+ansible-playbook -v playbook.yml
+
 # Running playbook
 ansible-playbook playbook.yml
 
@@ -256,5 +259,31 @@ ansible all -m shell -a 'cat /home/jan/file_01'
     - name: Second handler (Removing Nginx)
       apt:
         name: nginx
+        state: absent
+```
+
+### Register
+```
+---
+- name: Show request response
+  hosts: web
+  tasks:
+    - name: Installing curl
+      apt:
+        name: curl
+        state: present
+        update_cache: yes
+
+    - name: curl httpbin.org API
+      shell:
+        cmd: 'curl -X GET "https://httpbin.org/get" -H  "accept: application/json"'
+      register: curl_output
+    
+    - name: curl request response
+      debug: var=curl_output.stdout_lines
+
+    - name: Removing curl
+      apt:
+        name: curl
         state: absent
 ```

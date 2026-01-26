@@ -1,0 +1,35 @@
+---
+- name: Web server challenge
+  hosts: web
+  tasks:
+    - name: Updating all packages
+      apt:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Installing Apache
+      apt:
+        name: apache2
+        state: latest
+        update_cache: true
+
+    - name: Creating HTML page
+      shell:
+        cmd: echo "Hello From The Ansible Challenge" > /var/www/html/index.html
+      args:
+        executable: /bin/bash
+      notify:
+        - Reload Apache
+
+    - name: Public IP
+      shell:
+        cmd: ip -4 -br a
+      register: ip
+    - debug: var=ip.stdout_lines
+
+  handlers:  
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
