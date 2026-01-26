@@ -71,3 +71,89 @@ become_user = root
 # Logs path can be defined inside the ansible.cfg inside [defaults]
 log_path = /var/log/ansible.log
 ```
+
+### Running Ansible from CLI
+```
+# -i flag is not needed after configuring ansible.cfg
+ansible server_01 -i inventory.ini -m module_name -a arguments
+```
+
+### Some core modules
+```
+# user module
+ansible all -m user -a 'name=john comment="User IT" uid=2001'
+
+# command
+ansible all -m command -a id
+
+# shell
+ansible all -m shell -a 'cat /etc/passwd | grep charles'
+
+# dnf
+ansible all -m dnf -a 'name=nfs-utils state=latest'
+
+# yum
+ansible all -m yum -a 'name=cifs-utils state=latest'
+
+# systemd
+ansible all -m systemd -a 'name=crond state=restarted'
+
+#
+ansible all -m lineinfile -a ''
+
+# file
+ansible all -m file -a ''
+
+# archive
+ansible all -m archive -a ''
+
+# fetch
+ansible all -m fetch -a 'src=/etc/hosts dest=/tmp'
+
+# setup
+ansible all -m setup
+
+# execute command on the system without ansible 
+ansible all -u student --ask-pass --become --become-method=sudo --become-user=root --ask-become-pass -m shell -a id
+
+# find
+ansible all -m find -a 'paths=/var/log size=1m'
+
+# blockinfile
+ansible all -m blockinfile -a 'path=/etc/hosts block=|first line\nsecondline' (?)
+```
+
+### Scripting example
+```
+#!/bin/bash
+
+ansible all -m group -a 'name=it state=present'
+
+ansible all -m user -a 'name=charles group=it state=present'
+
+ansible all -m copy -a 'src=file_01 dest=/home/charles owner=charles group=it mode=0700'
+```
+
+### Ansible Galaxy
+```
+# list all installed colelctions
+ansible-galaxy collection list
+
+# Install ansible.posix collection
+ansbile-galaxy collection install ansible.posix
+
+# Check modules installed with ansible.posix collection
+ansible-doc ansible.posix -l
+
+ansible server_01 -m firewalld -a 'service=http state=enabled immediate=yes permanent=yes'
+```
+
+## Playbooks
+```
+
+```
+
+### Handlers
+```
+
+```
