@@ -150,7 +150,7 @@ ansible all -m copy -a 'src=scripts/file_01 dest=/home/jan owner=jan group=it mo
 
 ### Playbooks
 ```
-# Previous script written as playbook
+# Previous script written as a playbook
 ---
 - name: User management
   hosts: all

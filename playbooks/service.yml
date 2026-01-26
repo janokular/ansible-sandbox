@@ -2,18 +2,16 @@
 - name: Installing, restarting and removing Nginx 
   hosts: web
   tasks:
-  - name: Update apt cache
-    apt:
-      update_cache: yes
-  - name: Install Nginx
+  - name: Installing Nginx
     apt:
       name: nginx
       state: present
-  - name: Restart Nginx
+      update_cache: yes
+  - name: Restarting Nginx
     service:
       name: nginx
       state: restarted
-  - name: Remove Nginx
+  - name: Removing Nginx
     apt:
       name: nginx
       state: absent
