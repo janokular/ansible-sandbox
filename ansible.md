@@ -287,3 +287,8 @@ ansible all -m shell -a 'cat /home/jan/file_01'
         name: curl
         state: absent
 ```
+
+### Variables
+```
+
+```
