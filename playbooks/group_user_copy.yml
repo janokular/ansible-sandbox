@@ -1,0 +1,19 @@
+---
+- name: User management
+  hosts: all
+  tasks:
+    - name: Adding group
+      group:
+        name: it
+        state: present
+    - name: Adding user
+      user:
+        name: jan
+        state: present
+        group: it
+    - name: Copying file
+      copy:
+        src: ../files/file_01
+        dest: /home/jan/
+        owner: jan
+        mode: 0700

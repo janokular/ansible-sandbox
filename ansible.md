@@ -123,17 +123,6 @@ ansible all -m find -a 'paths=/var/log size=1m'
 ansible all -m blockinfile -a 'path=/etc/hosts block=|first line\nsecondline' (?)
 ```
 
-### Scripting example
-```
-#!/bin/bash
-
-ansible all -m group -a 'name=it state=present'
-
-ansible all -m user -a 'name=charles group=it state=present'
-
-ansible all -m copy -a 'src=file_01 dest=/home/charles owner=charles group=it mode=0700'
-```
-
 ### Ansible Galaxy
 ```
 # list all installed colelctions
@@ -148,9 +137,52 @@ ansible-doc ansible.posix -l
 ansible server_01 -m firewalld -a 'service=http state=enabled immediate=yes permanent=yes'
 ```
 
-## Playbooks
+### Scripting example
+```
+#!/bin/bash
+
+ansible all -m group -a 'name=it state=present'
+
+ansible all -m user -a 'name=jan group=it state=present'
+
+ansible all -m copy -a 'src=scripts/file_01 dest=/home/jan owner=jan group=it mode=0700'
 ```
 
+### Playbooks
+```
+# Previous script written as playbook
+---
+- name: User management
+  hosts: all
+  tasks:
+    - name: Adding group
+      group:
+        name: it
+        state: present
+    - name: Adding user
+      user:
+        name: jan
+        state: present
+        group: it
+    - name: Copying file
+      copy:
+        src: file_01
+        dest: /home/jan/
+        owner: jan
+        mode: 0700
+
+# Syntax check
+ansible-playbook --syntax-check playbook.yml
+
+# Dry run mode
+ansible-playbook -C playbook.yml
+
+# Running playbook
+ansible-playbook playbook.yml
+
+# Users management playbook check
+ansible all -m shell -a 'id jan'
+ansible all -m shell -a 'cat /home/jan/file_01'
 ```
 
 ### Handlers
