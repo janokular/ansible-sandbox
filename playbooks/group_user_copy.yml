@@ -6,11 +6,13 @@
       group:
         name: it
         state: present
+
     - name: Adding user
       user:
         name: jan
         state: present
         group: it
+
     - name: Copying file
       copy:
         src: ../files/file_01

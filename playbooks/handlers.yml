@@ -2,41 +2,47 @@
 - name: Installing packages
   hosts: web
   tasks:
-  - name: Installing Nginx
-    apt:
-      name: nginx
-      state: present
-      update_cache: yes
-    notify:
-      - Restarting Nginx
-  - name: Installing nano
-    apt:
-      name: nano
-      state: present
-      update_cache: yes
-    notify:
-      - Restarting Nginx
-  - name: Installing Vim
-    apt:
-      name: vim
-      state: present
-      update_cache: yes
-    notify:
-      - Restarting Nginx
-  - name: Removing Nginx
-    apt:
-      name: nginx
-      state: absent
-  - name: Removing naon
-    apt:
-      name: nano
-      state: absent
-  - name: Removing Vim
-    apt:
-      name: vim
-      state: absent
+    - name: Installing Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      notify:
+        - Restarting Nginx
+
+    - name: Installing nano
+      apt:
+        name: nano
+        state: present
+        update_cache: yes
+      notify:
+        - Restarting Nginx
+
+    - name: Installing Vim
+      apt:
+        name: vim
+        state: present
+        update_cache: yes
+      notify:
+        - Restarting Nginx
+
+    - name: Removing Nginx
+      apt:
+        name: nginx
+        state: absent
+
+    - name: Removing naon
+      apt:
+        name: nano
+        state: absent
+
+    - name: Removing Vim
+      apt:
+        name: vim
+        state: absent
+
   handlers:
-  - name: Restarting Nginx
-    service:
-      name: nginx
-      state: restarted
+    - name: Restarting Nginx
+      service:
+        name: nginx
+        state: restarted

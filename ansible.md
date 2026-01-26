@@ -151,6 +151,7 @@ ansible all -m copy -a 'src=scripts/file_01 dest=/home/jan owner=jan group=it mo
 ### Playbooks
 ```
 # Previous script written as a playbook
+
 ---
 - name: User management
   hosts: all
@@ -159,14 +160,16 @@ ansible all -m copy -a 'src=scripts/file_01 dest=/home/jan owner=jan group=it mo
       group:
         name: it
         state: present
+
     - name: Adding user
       user:
         name: jan
         state: present
         group: it
+
     - name: Copying file
       copy:
-        src: file_01
+        src: ../files/file_01
         dest: /home/jan/
         owner: jan
         mode: 0700
@@ -187,5 +190,71 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 
 ### Handlers
 ```
+# Handlers are special tasks that only run when notified by other tasks in a playbook
+---
+- name: Installing packages
+  hosts: web
+  tasks:
+    - name: Installing Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      notify:
+        - Restarting Nginx
 
+    - name: Installing nano
+      apt:
+        name: nano
+        state: present
+        update_cache: yes
+      notify:
+        - Restarting Nginx
+
+    - name: Installing Vim
+      apt:
+        name: vim
+        state: present
+        update_cache: yes
+      notify:
+        - Restarting Nginx
+
+  handlers:
+    - name: Restarting Nginx
+      service:
+        name: nginx
+        state: restarted
+```
+```
+# Important!
+# Handlers won't be executed if task wasn't executed
+# ex. Nginx is already installed
+
+---
+- name: Handlers execution order
+  hosts: all
+  tasks:
+    - name: Installing Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      notify:
+        - First handler (Restarting Nginx)
+        - Second handler (Removing Nginx)
+
+    - name: Task after handlers
+      debug:
+        msg: "I was executed before handlers"
+
+  handlers:
+    - name: First handler (Restarting Nginx)
+      systemd:
+        name: nginx
+        state: restarted
+
+    - name: Second handler (Removing Nginx)
+      apt:
+        name: nginx
+        state: absent
 ```

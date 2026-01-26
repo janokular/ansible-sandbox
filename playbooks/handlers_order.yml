@@ -1,0 +1,27 @@
+---
+- name: Handlers execution order
+  hosts: all
+  tasks:
+    - name: Installing Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      notify:
+        - First handler (Restarting Nginx)
+        - Second handler (Removing Nginx)
+
+    - name: Task after handlers
+      debug:
+        msg: "I was executed before handlers"
+
+  handlers:
+    - name: First handler (Restarting Nginx)
+      systemd:
+        name: nginx
+        state: restarted
+
+    - name: Second handler (Removing Nginx)
+      apt:
+        name: nginx
+        state: absent
