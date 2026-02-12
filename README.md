@@ -1,4 +1,4 @@
-## MusicStreamer
+## Ansible sandbox
 ### Start up the environment
 ```
 vagrant up
