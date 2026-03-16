@@ -194,6 +194,7 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 ### Handlers
 ```
 # Handlers are special tasks that only run when notified by other tasks in a playbook
+
 ---
 - name: Installing packages
   hosts: web
