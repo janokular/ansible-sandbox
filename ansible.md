@@ -319,6 +319,7 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 ```
 ```
 # Passing the external variable file
+
 cat variables/variables.yml
 http_port: 80
 server_name: prod_svr01
