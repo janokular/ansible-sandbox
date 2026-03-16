@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Basic variable
+  hosts: all
   vars:
     basic_var: My first variable
   tasks:

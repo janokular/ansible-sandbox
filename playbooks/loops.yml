@@ -1,0 +1,21 @@
+---
+- name: Looping through packages
+  hosts: all
+  vars:
+    packages:
+      - nano
+      - vim
+      - tree
+  tasks:
+    - name: Installing software
+      apt:
+        name: "{{ item  }}"
+        state: present
+        update_cache: yes
+      loop: "{{ packages }}"
+
+    - name: Uninstalling software
+      apt:
+        name: "{{ item  }}"
+        state: absent
+      loop: "{{ packages }}"

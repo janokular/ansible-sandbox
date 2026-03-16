@@ -1,4 +1,8 @@
-- hosts: server01
+---
+- name: Variables
+  vars_files:
+    - ../variables/variables.yml
+  hosts: server01
   tasks:
     - name: Display 1st variable
       debug:

@@ -290,7 +290,9 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 
 ### Variables
 ```
-- hosts: all
+---
+- name: Basic variable
+  hosts: all
   vars:
     basic_var: My first variable
   tasks:
@@ -302,7 +304,9 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 # Arrays
 # Items inside array can be accessed by the index number
 
-- hosts: all
+---
+- name: Arrays
+  hosts: all
   vars:
     packages:
       - git
@@ -314,11 +318,14 @@ ansible all -m shell -a 'cat /home/jan/file_01'
       msg: "{{ packages[0] }}"
 ```
 ```
-cat variables/var_file.yml
+# Passing the external variable file
+cat variables/variables.yml
 http_port: 80
 server_name: prod_svr01
 
-- hosts: server01
+---
+- name: Variables
+  hosts: server01
   tasks:
     - name: Display 1st variable
       debug:
@@ -328,9 +335,52 @@ server_name: prod_svr01
         msg: "{{ server_name }}"
 
 # To run the playbook with external variable file use -e flag
-ansible-playbook -e "@variables/var_file.yml" playbooks/variable_file.yml
+ansible-playbook -e "@variables/variables.yml" playbooks/variable_file.yml
 ```
 ```
-# Loops
+# vars_file
+# instead of passing the variable with -e flag file can be declared using vars_file tag
+
+---
+- name: Variables
+  vars_files:
+    - ../variables/variables.yml
+  hosts: server01
+  tasks:
+    - name: Display 1st variable
+      debug:
+        msg: "{{ http_port }}"
+    - name: Display 2nd variable
+      debug:
+        msg: "{{ server_name }}"
+```
+
+### Loops
+```
+---
+- name: Looping through packages
+  hosts: all
+  vars:
+    packages:
+      - nano
+      - vim
+      - tree
+  tasks:
+    - name: Installing software
+      apt:
+        name: "{{ item  }}"
+        state: present
+        update_cache: yes
+      loop: "{{ packages }}"
+
+    - name: Uninstalling software
+      apt:
+        name: "{{ item  }}"
+        state: absent
+      loop: "{{ packages }}"
+```
+
+### Roles
+```
 
 ```
