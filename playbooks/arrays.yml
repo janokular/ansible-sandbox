@@ -1,0 +1,10 @@
+- hosts: all
+  vars:
+    packages:
+      - git
+      - tree
+      - vim
+  tasks:
+  - name: Display value
+    debug:
+      msg: "{{ packages[0] }}"

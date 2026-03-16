@@ -290,5 +290,47 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 
 ### Variables
 ```
+- hosts: all
+  vars:
+    basic_var: My first variable
+  tasks:
+  - name: Display value
+    debug:
+      msg: "{{ basic_var }}"
+```
+```
+# Arrays
+# Items inside array can be accessed by the index number
+
+- hosts: all
+  vars:
+    packages:
+      - git
+      - tree
+      - vim
+  tasks:
+  - name: Display value
+    debug:
+      msg: "{{ packages[0] }}"
+```
+```
+cat variables/var_file.yml
+http_port: 80
+server_name: prod_svr01
+
+- hosts: server01
+  tasks:
+    - name: Display 1st variable
+      debug:
+        msg: "{{ http_port }}"
+    - name: Display 2nd variable
+      debug:
+        msg: "{{ server_name }}"
+
+# To run the playbook with external variable file use -e flag
+ansible-playbook -e "@variables/var_file.yml" playbooks/variable_file.yml
+```
+```
+# Loops
 
 ```
