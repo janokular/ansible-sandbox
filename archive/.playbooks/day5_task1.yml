@@ -1,0 +1,53 @@
+---
+- name: rsyslog
+  hosts: all
+  tasks:
+    - name: rsyslog installation
+      dnf:
+        name: rsyslog
+        state: latest
+    - name: rsyslog startup and autostart
+      systemd:
+        name: rsyslog
+        state: started
+        enabled: yes
+
+- name: katowice setup
+  hosts: katowice
+  tasks:
+    - name: rsyslog config
+      lineinfile:
+        path: /etc/rsyslog.conf
+        regexp: "{{ item.find }}"
+        line: "{{ item.replace }}"
+      loop:
+        - { find: '^#module(load="imudp")' , replace: 'module(load="imudp")' }
+        - { find: '^#input(type="imudp" port="514")' , replace: 'input(type="imudp" port="514")' }
+      notify: rsyslog restart
+    - name: firewalld config
+      firewalld:
+        port: 514/udp
+        state: enabled
+        permanent: yes
+        immediate: true
+  handlers:
+    - name: rsyslog restart
+      systemd:
+        name: rsyslog
+        state: restarted
+
+- name: poznan and gdansk setup
+  hosts:
+    - poznan
+    - gdansk
+  tasks:
+    - name: rsyslog config
+      lineinfile:
+        path: /etc/rsyslog.conf
+        line: "*.* @katowice"
+      notify: rsyslog restart
+  handlers:
+    - name: rsyslog restart
+      systemd:
+        name: rsyslog
+        state: restarted

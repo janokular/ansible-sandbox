@@ -1,0 +1,25 @@
+---
+- name: Users management
+  hosts: all
+
+  vars_files: play_vars.yml
+
+  tasks:
+    - name: adding group {{ group_name }}
+      group:
+        name: '{{ group_name }}'
+        state: present
+
+    - name: adding user {{ user_name }} into group {{ group_name }}
+      user:
+        name: '{{ user_name }}'
+        state: present
+        group: '{{ group_name }}'
+
+    - name: file copy {{ file_name }}
+      copy:
+        src: '{{ file_name }}'
+        dest: '/home/{{ user_name }}/'
+        owner: '{{ user_name }}'
+        group: '{{ group_name }}'
+        mode: 0700

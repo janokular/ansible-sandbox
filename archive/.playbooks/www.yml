@@ -1,0 +1,26 @@
+---
+- name: Web server installation
+  hosts: servers
+  tasks:
+    - name: httpd installation
+      yum:
+        name: httpd
+        state: latest
+
+    - name: index.html creation
+      copy:
+        content: "Hello Apache\n"
+        dest: /var/www/html/index.html
+
+    - name: httpd startup
+      service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: firewall for port 80/tcp
+      firewalld:
+        port: 80/tcp
+        permanent: yes
+        state: enabled
+        immediate: true

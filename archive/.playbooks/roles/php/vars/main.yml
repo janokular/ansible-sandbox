@@ -1,0 +1,14 @@
+---
+# vars file for php
+
+package:
+  - httpd
+  - php
+
+service:
+  - httpd
+  - php-fpm
+
+files:
+  - index.html
+  - app.php

@@ -1,0 +1,7 @@
+---
+- name: SELinux - port policy
+  seport:
+    ports: "{{ port_num }}"
+    proto: tcp
+    setype: http_port_t
+    state: present

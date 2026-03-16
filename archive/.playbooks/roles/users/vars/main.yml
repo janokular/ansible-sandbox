@@ -1,0 +1,6 @@
+---
+# vars file for users
+group: it
+files:
+  - file1
+  - file2

@@ -1,0 +1,11 @@
+---
+- name: Apache installation
+  hosts: web
+  tasks:
+    - name: httpd installation
+      dnf:
+        name: '{{ item }}'
+        state: latest
+      loop:
+        - httpd
+        - php

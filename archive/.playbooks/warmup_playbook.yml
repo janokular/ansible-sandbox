@@ -1,0 +1,21 @@
+---
+- name: Gdanks package installation
+  vars_files: gdansk.yml
+  hosts: gdansk
+  tasks:
+    - name: Package installation
+      dnf:
+        name: '{{ item }}'
+        state: latest
+      loop: '{{ packages }}'
+
+- name: Poznan package installation
+  hosts: poznan
+  tasks:
+    - name: Package installation
+      dnf:
+        name: '{{ item }}'
+        state: latest
+      loop:
+        - targetcli        
+        - iscsi-initiator-utils

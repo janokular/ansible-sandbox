@@ -1,0 +1,38 @@
+---
+- name: SFTP configuration
+  hosts: poznan
+  tasks:
+    - name: SFTP instalaltion
+      dnf:
+        name: vsftpd
+        state: latest
+    - name: SFTP startup
+      systemd:
+        name: vsftpd
+        state: started
+        enabled: yes
+    - name: Firewall configuration
+      firewalld:
+        service: vsftpd
+        state: enabled
+        immediate: true
+        permanent: yes
+    - name: File upload
+      copy:
+        src: "{{ item }}"
+        dest: /etc/ftp/pub
+      loop:
+        - file1
+        - file2
+    - name: SFTP configuration
+      lineinfile:
+        path: etc/vsftpd/vsftpd.conf
+        regexp: "anonymous_enable=NO"
+        line: "anonymous_enable=YES"
+      notify:
+        - restart sftp
+  handlers:
+    - name: restart sftp
+      service:
+        name: vsftpd
+        state: restarted

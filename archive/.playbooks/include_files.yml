@@ -1,0 +1,14 @@
+---
+- name: test
+  hosts: poznan
+  vars:
+    var: hello
+  tasks:
+    - name: test 1
+      debug:
+        msg: "vars value: {{ var }}"
+    - name: include_vars value
+      include_vars: hello_world.yml
+    - name: test 2
+      debug:
+        msg:  "vars value: {{ var }}"

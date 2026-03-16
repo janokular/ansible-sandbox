@@ -1,0 +1,21 @@
+---
+- name: Users management
+  become: True
+  hosts: servers
+  vars:
+    users:
+      - jhon
+      - bob
+      - tom
+  tasks:
+    - name: Group creation
+      group:
+        name: administrator
+        state: present
+
+    - name: User creation
+      user:
+        name: '{{ item }}'
+        state: present
+        group: administrator
+      loop: '{{ users }}'

@@ -1,0 +1,11 @@
+---
+- name: App files copying
+  copy:
+    src: "{{ item }}"
+    dest: /var/www/html
+  loop: "{{ files }}"
+
+- name: service Blog
+  template:
+    src: blog.j2
+    dest: /var/www/html/blog.html

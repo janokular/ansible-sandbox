@@ -1,0 +1,9 @@
+---
+- name: Jinja test
+  hosts: all
+  vars:
+    var: hello world
+  tasks:
+    - name: Jinja test
+      debug:
+        msg: "{{ var | upper }}"

@@ -1,0 +1,7 @@
+---
+- name: Display facts
+  hosts: all
+  tasks:
+    - name: "== FACTS =="
+      debug:
+        msg: "{{ ansible_fqdn }} {{ ansible_default_ipv4.address }} {{ ansible_memory_mb.real.total }}"

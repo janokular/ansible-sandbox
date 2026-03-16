@@ -1,0 +1,7 @@
+---
+# tasks file for php
+- include_tasks: service.yml
+- include_tasks: firewall.yml
+- include_tasks: app.yml
+- include_tasks: config.yml
+- include_tasks: selinux.yml

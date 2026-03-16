@@ -1,0 +1,21 @@
+---
+# tasks file for users
+- name: "Adding group {{ group }}"
+  group:
+    name: "{{ group }}"
+    state: present
+
+- name: "Adding user {{ user }} to group {{ group }}"
+  user:
+    name: "{{ user }}"
+    group: "{{ group }}"
+    state: present
+
+- name: File copying
+  copy:
+    src: "{{ item }}"
+    dest: "/home/{{ user }}"
+    owner: "{{ user }}"
+    group: "{{ group }}"
+    mode: 0700
+  loop: "{{ files }}"

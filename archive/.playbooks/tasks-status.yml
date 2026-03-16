@@ -1,0 +1,16 @@
+---
+- name: Task testing
+  hosts: gdansk
+  vars:
+    package: saaamba
+
+  tasks:
+    - name: Package installation "{{ package }}"
+      dnf:
+        name: "{{ package }}"
+        state: latest
+      ignore_errors: true
+
+    - name: Next Task
+      debug:
+        msg: "Next task has been executed"

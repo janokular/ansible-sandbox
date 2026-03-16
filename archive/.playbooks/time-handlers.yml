@@ -1,0 +1,26 @@
+---
+- name: Time configuration
+  hosts: poznan
+  tasks:
+    - name: Time change
+      lineinfile:
+        path: /etc/chrony.conf
+        regexp: "^pool 2."
+        line: "server base iburst"
+      notify:
+        - Service restart
+        - Second handlers
+
+    - name: Task after handlers
+      debug:
+        msg: "Executed after handler"
+
+  handlers:
+    - name: Service restart
+      systemd:
+        name: chronyd
+        state: restarted
+
+    - name: Second handlers
+      debug:
+        msg: "Second handlers"

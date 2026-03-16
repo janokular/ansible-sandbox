@@ -1,0 +1,7 @@
+---
+- name: Users role call
+  hosts: all
+  vars:
+    user: jan
+  roles:
+    - users

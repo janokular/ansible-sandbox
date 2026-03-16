@@ -1,0 +1,7 @@
+---
+- name: System Information
+  hosts: all
+  tasks:
+    - name: Show system resources
+      debug:
+        msg: "host {{ ansible_hostname }} has {{ ansible_memfree_mb }} RAM & {{ ansible_processor_count }} CPU"

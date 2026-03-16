@@ -1,0 +1,20 @@
+---
+- name: Users management
+  hosts: all
+  tasks:
+    - name: Adding group
+      group:
+        name:  '{{ item }}'
+        state: present
+      loop:
+        - it
+        - developers
+
+    - name: Adding users
+      user:
+        name: '{{ item.user }}'
+        state: present
+        name: '{{ item.group }}'
+      loop:
+        - { user: jan, group: developers }
+        - { user: han, group: it }

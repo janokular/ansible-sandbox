@@ -1,0 +1,23 @@
+---
+- name: User management
+  hosts: all
+  vars_files: task_groups.yml
+  tasks:
+    - block:
+        - name: Adding user
+          user:
+            name: '{{ item.name }}'
+            state: present
+            group: '{{ item.group }}'
+          loop:
+            - { name: krzysztof, group: '{{ group }}' }
+            - { name: leszek, group: '{{ group }}' }
+            - { name: daniek, group: '{{ group }}' }
+      rescue:
+        - name: Adding user failed
+          debug:
+            msg: "No group {{ group }}"
+      always:
+        - name: Try harder msg
+          debug:
+            msg: "Try harder ;)"
