@@ -8,20 +8,20 @@
         state: present
         update_cache: yes
       notify:
-        - First handler (Restarting Nginx)
-        - Second handler (Removing Nginx)
+        - first handler (Restarting Nginx)
+        - second handler (Removing Nginx)
 
     - name: Task after handlers
       debug:
         msg: "I was executed before handlers"
 
   handlers:
-    - name: First handler (Restarting Nginx)
+    - name: first handler (Restarting Nginx)
       systemd:
         name: nginx
         state: restarted
 
-    - name: Second handler (Removing Nginx)
+    - name: second handler (Removing Nginx)
       apt:
         name: nginx
         state: absent

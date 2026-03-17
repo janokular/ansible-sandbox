@@ -21,19 +21,33 @@ ansible-doc ping
 ansible-doc -l
 ```
 
+### Naming conventions
+```
+# Describe the purpose clearly!
+
+# Groups:               hyphens-hyphens
+# Hosts:                lowercase
+
+# Playbooks:            hyphens-hyphens.yml
+# Roles:                lowercase
+# Variables:            underscores_underscores.yml
+# Handlers:             lowercase spaces descriptive
+# Templates:            hyphens-hyphens.j2
+```
+
 ### inventory.ini
 ```
-server_00
+server00
 
-[group_01]              # group name
-server_01               # hosts inside group_01
+[group-01]              # group name
+server01                # hosts inside group-01
 
-[group_02]
-server_02
+[group-02]
+server02
 
-[group_03:children]     # nested group 
-group_01
-group_02
+[group-03:children]     # nested group 
+group-01
+group-02
 
 # Ansible creates two groups by default `all` and `ungrouped`
 
@@ -48,8 +62,8 @@ www[01:50].example.com
 www[01:50:2].example.com
 
 # Checking inventory structure
-ansible group_01 --list-hosts
-ansible group_02 --list-hosts
+ansible group-01 --list-hosts
+ansible group-02 --list-hosts
 ansible all --list-hosts
 
 ansible-inventory --graph
@@ -61,7 +75,7 @@ ansible-invenotry --list --yaml
 ```
 [defaults]
 remote_user = ansible
-invenotry = ./inventory.cfg
+invenotry = ./inventory.ini
 
 [privilege_escalation]
 become = True
@@ -75,7 +89,7 @@ log_path = /var/log/ansible.log
 ### Running Ansible from CLI
 ```
 # -i flag is not needed after configuring ansible.cfg
-ansible server_01 -i inventory.ini -m module_name -a arguments
+ansible server01 -i inventory.ini -m module_name -a arguments
 ```
 
 ### Some core modules (?)
@@ -149,26 +163,26 @@ ansbile-galaxy collection install ansible.posix
 # Check modules installed with ansible.posix collection
 ansible-doc ansible.posix -l
 
-ansible server_01 -m firewalld -a 'service=http state=enabled immediate=yes permanent=yes'
+ansible server01 -m firewalld -a 'service=http state=enabled immediate=yes permanent=yes'
 ```
 
 ### Scripting example
 ```
-cat scripts/script_01.sh
+cat scripts/script-01.sh
 #!/bin/bash
 
 ansible all -m group -a 'name=it state=present'
 
 ansible all -m user -a 'name=jan group=it state=present'
 
-ansible all -m copy -a 'src=../files/file_01 dest=/home/jan owner=jan group=it mode=0700'
+ansible all -m copy -a 'src=../files/file.txt dest=/home/jan owner=jan group=it mode=0700'
 ```
 
 ### Playbooks
 ```
 # Previous script written as a playbook
 
-cat playbooks/playbook_01.yml
+cat playbooks/playbook-01.yml
 ---
 - name: Playbook
   hosts: all
@@ -186,30 +200,30 @@ cat playbooks/playbook_01.yml
 
     - name: Copying file
       copy:
-        src: ../files/file_01
+        src: ../files/file.txt
         dest: /home/jan/
         owner: jan
         mode: 0700
 ```
 ```
 # Syntax check
-ansible-playbook --syntax-check playbook_01.yml
+ansible-playbook --syntax-check playbook-01.yml
 
 # Dry run mode
-ansible-playbook -C playbook_01.yml
+ansible-playbook -C playbook-01.yml
 
 # Verbose mode
-ansible-playbook -v playbook_01.yml
+ansible-playbook -v playbook-01.yml
 
 # Running playbook
-ansible-playbook playbook_01.yml
+ansible-playbook playbook-01.yml
 
-# playbook_01 execution check
+# playbook-01.yml execution check
 ansible all -m shell -a 'id jan'
-ansible all -m shell -a 'cat /home/jan/file_01'
+ansible all -m shell -a 'cat /home/jan/file.txt'
 ```
 ```
-cat playbooks/playbook_02_apt.yml
+cat playbooks/playbook-02-apt.yml
 ---
 - name: Playbook
   hosts: web
@@ -226,7 +240,7 @@ cat playbooks/playbook_02_apt.yml
         state: absent
 ```
 ```
-cat playbooks/playbook_03_service.yml
+cat playbooks/playbook-03-service.yml
 ---
 - name: Playbook
   hosts: web
@@ -252,7 +266,7 @@ cat playbooks/playbook_03_service.yml
 ```
 # Handlers are special tasks that only run when notified by other tasks in a playbook
 
-cat playbooks/handlers_01.yml
+cat playbooks/handlers-01.yml
 ---
 - name: Handlers
   hosts: web
@@ -263,7 +277,7 @@ cat playbooks/handlers_01.yml
         state: present
         update_cache: yes
       notify:
-        - Restarting Nginx
+        - restart nginx
 
     - name: Installing nano
       apt:
@@ -271,7 +285,7 @@ cat playbooks/handlers_01.yml
         state: present
         update_cache: yes
       notify:
-        - Restarting Nginx
+        - restart nginx
 
     - name: Installing Vim
       apt:
@@ -279,10 +293,10 @@ cat playbooks/handlers_01.yml
         state: present
         update_cache: yes
       notify:
-        - Restarting Nginx
+        - restart nginx
 
   handlers:
-    - name: Restarting Nginx
+    - name: restart nginx
       service:
         name: nginx
         state: restarted
@@ -292,7 +306,7 @@ cat playbooks/handlers_01.yml
 # Handlers won't be executed if task wasn't executed
 # ex. Nginx is already installed
 
-cat playbooks/handlers_02_order.yml
+cat playbooks/handlers-02-order.yml
 ---
 - name: Handlers
   hosts: all
@@ -303,20 +317,20 @@ cat playbooks/handlers_02_order.yml
         state: present
         update_cache: yes
       notify:
-        - First handler (Restarting Nginx)
-        - Second handler (Removing Nginx)
+        - first handler (Restarting Nginx)
+        - second handler (Removing Nginx)
 
     - name: Task after handlers
       debug:
         msg: "I was executed before handlers"
 
   handlers:
-    - name: First handler (Restarting Nginx)
+    - name: first handler (Restarting Nginx)
       systemd:
         name: nginx
         state: restarted
 
-    - name: Second handler (Removing Nginx)
+    - name: second handler (Removing Nginx)
       apt:
         name: nginx
         state: absent
@@ -324,7 +338,7 @@ cat playbooks/handlers_02_order.yml
 
 ### Register
 ```
-cat playbooks/register_01.yml
+cat playbooks/register-01.yml
 ---
 - name: Register
   hosts: web
@@ -352,7 +366,7 @@ cat playbooks/register_01.yml
 ### Variables
 **group_vars > host_vars > vars > vars_files > vars task > include_vars > -e**
 ```
-cat playbooks/variable_01.yml
+cat playbooks/variable-01.yml
 ---
 - name: Basic variable
   hosts: all
@@ -367,7 +381,7 @@ cat playbooks/variable_01.yml
 # Arrays
 # Items inside array can be accessed by the index number
 
-cat playbooks/variable_02_arrays.yml
+cat playbooks/variable-02-arrays.yml
 ---
 - name: Variables
   hosts: all
@@ -388,7 +402,7 @@ cat variables/variables.yml
 http_port: 80
 server_name: prod_svr01
 
-cat playbooks/variable_03_flag.yml
+cat playbooks/variable-03-flag.yml
 ---
 - name: Variables
   hosts: server01
@@ -401,13 +415,13 @@ cat playbooks/variable_03_flag.yml
         msg: "{{ server_name }}"
 
 # To run the playbook with external variable file use -e flag
-ansible-playbook -e "@variables/variables.yml" playbooks/variable_file.yml
+ansible-playbook -e "@variables/variables.yml" playbooks/variable-03-flag.yml
 ```
 ```
 # vars_file
 # instead of passing the variable with -e flag file can be declared using vars_file tag
 
-cat playbooks/variable_04_file.yml
+cat playbooks/variable-04-file.yml
 ---
 - name: Variables
   vars_files:
@@ -424,7 +438,7 @@ cat playbooks/variable_04_file.yml
 
 ### Loops
 ```
-cat playbooks/loops_01.yml
+cat playbooks/loops-01.yml
 ---
 - name: Loops
   hosts: all
@@ -448,7 +462,7 @@ cat playbooks/loops_01.yml
       loop: "{{ packages }}"
 ```
 ```
-cat playbooks/loops_02.yml
+cat playbooks/loops-02.yml
 ---
 - name: Loops
   hosts: db
@@ -476,7 +490,7 @@ cat playbooks/loops_02.yml
       loop: "{{ users }}"
 ```
 ```
-cat playbooks/loops_03.yml
+cat playbooks/loops-03.yml
 ---
 - name: Loops
   hosts: db

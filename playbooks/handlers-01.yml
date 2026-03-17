@@ -8,7 +8,7 @@
         state: present
         update_cache: yes
       notify:
-        - Restarting Nginx
+        - restart nginx
 
     - name: Installing nano
       apt:
@@ -16,7 +16,7 @@
         state: present
         update_cache: yes
       notify:
-        - Restarting Nginx
+        - restart nginx
 
     - name: Installing Vim
       apt:
@@ -24,25 +24,10 @@
         state: present
         update_cache: yes
       notify:
-        - Restarting Nginx
-
-    - name: Removing Nginx
-      apt:
-        name: nginx
-        state: absent
-
-    - name: Removing naon
-      apt:
-        name: nano
-        state: absent
-
-    - name: Removing Vim
-      apt:
-        name: vim
-        state: absent
+        - restart nginx
 
   handlers:
-    - name: Restarting Nginx
+    - name: restart nginx
       service:
         name: nginx
         state: restarted
