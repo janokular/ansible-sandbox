@@ -78,9 +78,9 @@ log_path = /var/log/ansible.log
 ansible server_01 -i inventory.ini -m module_name -a arguments
 ```
 
-### Some core modules
+### Some core modules (?)
 ```
-# user module
+# user
 ansible all -m user -a 'name=john comment="User IT" uid=2001'
 
 # command
@@ -88,6 +88,9 @@ ansible all -m command -a id
 
 # shell
 ansible all -m shell -a 'cat /etc/passwd | grep charles'
+
+# apt
+ansible all -m apt -a ''
 
 # dnf
 ansible all -m dnf -a 'name=nfs-utils state=latest'
@@ -98,7 +101,10 @@ ansible all -m yum -a 'name=cifs-utils state=latest'
 # systemd
 ansible all -m systemd -a 'name=crond state=restarted'
 
-#
+# service
+ansible all -m service -a ''
+
+# lineinfile
 ansible all -m lineinfile -a ''
 
 # file
@@ -121,6 +127,15 @@ ansible all -m find -a 'paths=/var/log size=1m'
 
 # blockinfile
 ansible all -m blockinfile -a 'path=/etc/hosts block=|first line\nsecondline' (?)
+
+# mount
+ansible all -m mount -a ''
+
+# parted
+ansible all -m parted -a ''
+
+# filesystem
+ansible all -m filesystem -a ''
 ```
 
 ### Ansible Galaxy
