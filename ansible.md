@@ -154,7 +154,7 @@ ansible all -m filesystem -a ''
 
 ### Ansible Galaxy
 ```
-# list all installed colelctions
+# list all installed collections
 ansible-galaxy collection list
 
 # Install ansible.posix collection
