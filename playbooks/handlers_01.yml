@@ -1,5 +1,5 @@
 ---
-- name: Installing packages
+- name: Handlers
   hosts: web
   tasks:
     - name: Installing Nginx

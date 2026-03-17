@@ -1,0 +1,20 @@
+---
+- name: Loops
+  hosts: db
+  tasks:
+    - name: Group creation
+      group:
+        name:  "{{ item }}"
+        state: present
+      loop:
+        - dev
+        - admin
+
+    - name: User creation
+      user:
+        name: "{{ item.user }}"
+        state: present
+        name: "{{ item.group }}"
+      loop:
+        - { user: jan, group: dev }
+        - { user: bob, group: admin }

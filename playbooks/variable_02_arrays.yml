@@ -1,5 +1,5 @@
 ---
-- name: Arrays
+- name: Variables
   hosts: all
   vars:
     packages:

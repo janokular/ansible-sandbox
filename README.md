@@ -6,5 +6,5 @@ vagrant up
 
 ### Checking the network status
 ```
-ansible all -m ping 
+ansible all -m ping
 ```

@@ -1,5 +1,5 @@
 ---
-- name: User management
+- name: Playbook
   hosts: all
   tasks:
     - name: Adding group

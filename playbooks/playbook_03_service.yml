@@ -1,5 +1,5 @@
 ---
-- name: Installing and removing Nginx 
+- name: Playbook
   hosts: web
   tasks:
     - name: Installing Nginx
@@ -7,6 +7,11 @@
         name: nginx
         state: present
         update_cache: yes
+
+    - name: Restarting Nginx
+      service:
+        name: nginx
+        state: restarted
 
     - name: Removing Nginx
       apt:

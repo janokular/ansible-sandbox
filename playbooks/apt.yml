@@ -2,7 +2,7 @@
 - name: Update and upgrade apt packages
   hosts: all
   tasks:
-  - name: Updating...
+  - name: Updating all packages
     apt:
       upgrade: yes
       update_cache: yes

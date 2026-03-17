@@ -1,5 +1,5 @@
 ---
-- name: Show request response
+- name: Register
   hosts: web
   tasks:
     - name: Installing curl

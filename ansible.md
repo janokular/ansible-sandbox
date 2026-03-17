@@ -139,21 +139,23 @@ ansible server_01 -m firewalld -a 'service=http state=enabled immediate=yes perm
 
 ### Scripting example
 ```
+cat scripts/script_01.sh
 #!/bin/bash
 
 ansible all -m group -a 'name=it state=present'
 
 ansible all -m user -a 'name=jan group=it state=present'
 
-ansible all -m copy -a 'src=scripts/file_01 dest=/home/jan owner=jan group=it mode=0700'
+ansible all -m copy -a 'src=../files/file_01 dest=/home/jan owner=jan group=it mode=0700'
 ```
 
 ### Playbooks
 ```
 # Previous script written as a playbook
 
+cat playbooks/playbook_01.yml
 ---
-- name: User management
+- name: Playbook
   hosts: all
   tasks:
     - name: Adding group
@@ -173,30 +175,71 @@ ansible all -m copy -a 'src=scripts/file_01 dest=/home/jan owner=jan group=it mo
         dest: /home/jan/
         owner: jan
         mode: 0700
-
+```
+```
 # Syntax check
-ansible-playbook --syntax-check playbook.yml
+ansible-playbook --syntax-check playbook_01.yml
 
 # Dry run mode
-ansible-playbook -C playbook.yml
+ansible-playbook -C playbook_01.yml
 
 # Verbose mode
-ansible-playbook -v playbook.yml
+ansible-playbook -v playbook_01.yml
 
 # Running playbook
-ansible-playbook playbook.yml
+ansible-playbook playbook_01.yml
 
-# Users management playbook check
+# playbook_01 execution check
 ansible all -m shell -a 'id jan'
 ansible all -m shell -a 'cat /home/jan/file_01'
+```
+```
+cat playbooks/playbook_02_apt.yml
+---
+- name: Playbook
+  hosts: web
+  tasks:
+    - name: Installing Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Removing Nginx
+      apt:
+        name: nginx
+        state: absent
+```
+```
+cat playbooks/playbook_03_service.yml
+---
+- name: Playbook
+  hosts: web
+  tasks:
+    - name: Installing Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Restarting Nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Removing Nginx
+      apt:
+        name: nginx
+        state: absent
 ```
 
 ### Handlers
 ```
 # Handlers are special tasks that only run when notified by other tasks in a playbook
 
+cat playbooks/handlers_01.yml
 ---
-- name: Installing packages
+- name: Handlers
   hosts: web
   tasks:
     - name: Installing Nginx
@@ -234,8 +277,9 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 # Handlers won't be executed if task wasn't executed
 # ex. Nginx is already installed
 
+cat playbooks/handlers_02_order.yml
 ---
-- name: Handlers execution order
+- name: Handlers
   hosts: all
   tasks:
     - name: Installing Nginx
@@ -265,8 +309,9 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 
 ### Register
 ```
+cat playbooks/register_01.yml
 ---
-- name: Show request response
+- name: Register
   hosts: web
   tasks:
     - name: Installing curl
@@ -290,7 +335,9 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 ```
 
 ### Variables
+#### group_vars > host_vars > vars > vars_files > vars task > include_vars > -e
 ```
+cat playbooks/variable_01.yml
 ---
 - name: Basic variable
   hosts: all
@@ -305,8 +352,9 @@ ansible all -m shell -a 'cat /home/jan/file_01'
 # Arrays
 # Items inside array can be accessed by the index number
 
+cat playbooks/variable_02_arrays.yml
 ---
-- name: Arrays
+- name: Variables
   hosts: all
   vars:
     packages:
@@ -325,6 +373,7 @@ cat variables/variables.yml
 http_port: 80
 server_name: prod_svr01
 
+cat playbooks/variable_03_flag.yml
 ---
 - name: Variables
   hosts: server01
@@ -343,6 +392,7 @@ ansible-playbook -e "@variables/variables.yml" playbooks/variable_file.yml
 # vars_file
 # instead of passing the variable with -e flag file can be declared using vars_file tag
 
+cat playbooks/variable_04_file.yml
 ---
 - name: Variables
   vars_files:
@@ -359,8 +409,9 @@ ansible-playbook -e "@variables/variables.yml" playbooks/variable_file.yml
 
 ### Loops
 ```
+cat playbooks/loops_01.yml
 ---
-- name: Looping through packages
+- name: Loops
   hosts: all
   vars:
     packages:
@@ -380,6 +431,57 @@ ansible-playbook -e "@variables/variables.yml" playbooks/variable_file.yml
         name: "{{ item  }}"
         state: absent
       loop: "{{ packages }}"
+```
+```
+cat playbooks/loops_02.yml
+---
+- name: Loops
+  hosts: db
+  vars:
+    groups:
+      - dev
+      - admin
+    users:
+      - name: "jan"
+        group: "admin"
+      - name: "bob"
+        group: "dev"
+  tasks:
+    - name: Group creation
+      group:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ groups }}"
+
+    - name: User creation
+      user:
+        name: "{{ item.name }}"
+        state: present
+        group: "{{ item.group }}"
+      loop: "{{ users }}"
+```
+```
+cat playbooks/loops_03.yml
+---
+- name: Loops
+  hosts: db
+  tasks:
+    - name: Group creation
+      group:
+        name:  "{{ item }}"
+        state: present
+      loop:
+        - dev
+        - admin
+
+    - name: User creation
+      user:
+        name: "{{ item.user }}"
+        state: present
+        name: "{{ item.group }}"
+      loop:
+        - { user: jan, group: dev }
+        - { user: bob, group: admin }
 ```
 
 ### Roles

@@ -1,5 +1,5 @@
 ---
-- name: Handlers execution order
+- name: Handlers
   hosts: all
   tasks:
     - name: Installing Nginx

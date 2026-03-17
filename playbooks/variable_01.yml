@@ -1,5 +1,5 @@
 ---
-- name: Basic variable
+- name: Variables
   hosts: all
   vars:
     basic_var: My first variable

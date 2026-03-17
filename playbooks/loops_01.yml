@@ -1,5 +1,5 @@
 ---
-- name: Looping through packages
+- name: Loops
   hosts: all
   vars:
     packages:
