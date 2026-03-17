@@ -335,7 +335,7 @@ cat playbooks/register_01.yml
 ```
 
 ### Variables
-#### group_vars > host_vars > vars > vars_files > vars task > include_vars > -e
+**group_vars > host_vars > vars > vars_files > vars task > include_vars > -e**
 ```
 cat playbooks/variable_01.yml
 ---
