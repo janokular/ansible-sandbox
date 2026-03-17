@@ -400,7 +400,7 @@ cat playbooks/variable-02-arrays.yml
 
 cat variables/variables.yml
 http_port: 80
-server_name: prod_svr01
+server_name: prod01
 
 cat playbooks/variable-03-flag.yml
 ---
