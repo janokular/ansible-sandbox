@@ -549,7 +549,22 @@ cat playbooks/loops-03.yml
         - { user: bob, group: admin }
 ```
 
+### When
+```
+
+```
+
+### Block
+```
+
+```
+
 ### Roles
+```
+
+```
+
+### Vault
 ```
 
 ```
