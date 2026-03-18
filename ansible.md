@@ -366,6 +366,8 @@ cat playbooks/register-01.yml
 ### Variables
 **group_vars > host_vars > vars > vars_files > vars task > include_vars > -e**
 ```
+# vars
+
 cat playbooks/variable-01.yml
 ---
 - name: Basic variable
@@ -378,7 +380,7 @@ cat playbooks/variable-01.yml
       msg: "{{ basic_var }}"
 ```
 ```
-# Arrays
+# vars (Arrays)
 # Items inside array can be accessed by the index number
 
 cat playbooks/variable-02-arrays.yml
@@ -396,11 +398,7 @@ cat playbooks/variable-02-arrays.yml
       msg: "{{ packages[0] }}"
 ```
 ```
-# Passing the external variable file
-
-cat variables/variables.yml
-http_port: 80
-server_name: prod01
+# -e flag (Passing the external variable file)
 
 cat playbooks/variable-03-flag.yml
 ---
@@ -418,14 +416,18 @@ cat playbooks/variable-03-flag.yml
 ansible-playbook -e "@variables/variables.yml" playbooks/variable-03-flag.yml
 ```
 ```
-# vars_file
+# vars_files
 # instead of passing the variable with -e flag file can be declared using vars_file tag
+
+cat playbooks/var_files/variables.yml
+http_port: 80
+server_name: prod01
 
 cat playbooks/variable-04-file.yml
 ---
 - name: Variables
   vars_files:
-    - ../variables/variables.yml
+    - vars_files/variables.yml
   hosts: server01
   tasks:
     - name: Display 1st variable
@@ -434,6 +436,40 @@ cat playbooks/variable-04-file.yml
     - name: Display 2nd variable
       debug:
         msg: "{{ server_name }}"
+```
+```
+# group_vars
+
+tree playbooks/group_vars
+group_vars
+|-- db
+|   |-- variables.yml
+`-- web
+    `-- variables.yml
+
+cat group_vars/db/variables.yml
+...
+
+cat group_vars/web/variables.yml
+...
+
+cat playbooks/variable-05-group.yml
+---
+```
+
+```
+# host_vars
+
+tree playbooks/host_vars
+host_vars
+`-- server00
+    `-- variables.yml
+
+cat playbooks/host_vars/server00/variables.yml
+...
+
+cat playbooks/variable-06-host.yml
+---
 ```
 
 ### Loops

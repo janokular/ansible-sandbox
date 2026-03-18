@@ -1,7 +1,7 @@
 ---
 - name: Variables
   vars_files:
-    - ../variables/variables.yml
+    - ./vars_files/variables.yml
   hosts: server01
   tasks:
     - name: Display 1st variable
