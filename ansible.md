@@ -448,10 +448,10 @@ group_vars
     `-- variables.yml
 
 cat group_vars/db/variables.yml
-...
+message: "Variable for db group"
 
 cat group_vars/web/variables.yml
-...
+message: "Variable for web group"
 
 cat playbooks/variable-05-group.yml
 ---
@@ -466,7 +466,8 @@ host_vars
     `-- variables.yml
 
 cat playbooks/host_vars/server00/variables.yml
-...
+message: "Variable for server00 host"
+
 
 cat playbooks/variable-06-host.yml
 ---
@@ -555,6 +556,11 @@ cat playbooks/loops-03.yml
 ```
 
 ### Block
+```
+
+```
+
+### Templates
 ```
 
 ```
