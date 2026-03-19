@@ -21,7 +21,7 @@ ansible-doc ping
 ansible-doc -l
 ```
 
-### Naming conventions
+#### Naming conventions
 ```
 # Describe the purpose clearly!
 
@@ -364,42 +364,12 @@ cat playbooks/register-01.yml
 ```
 
 ### Variables
-**group_vars > host_vars > vars > vars_files > vars task > include_vars > -e**
 ```
-# vars
+# group_vars > host_vars > vars > vars_files > vars task > include_vars > -e flag
+```
 
-cat playbooks/variable-01.yml
----
-- name: Basic variable
-  hosts: all
-  vars:
-    basic_var: My first variable
-  tasks:
-  - name: Display value
-    debug:
-      msg: "{{ basic_var }}"
+#### -e flag
 ```
-```
-# vars (Arrays)
-# Items inside array can be accessed by the index number
-
-cat playbooks/variable-02-arrays.yml
----
-- name: Variables
-  hosts: all
-  vars:
-    packages:
-      - git
-      - tree
-      - vim
-  tasks:
-  - name: Display value
-    debug:
-      msg: "{{ packages[0] }}"
-```
-```
-# -e flag (Passing the external variable file)
-
 cat playbooks/variable-03-flag.yml
 ---
 - name: Variables
@@ -413,13 +383,19 @@ cat playbooks/variable-03-flag.yml
         msg: "{{ server_name }}"
 
 # To run the playbook with external variable file use -e flag
-ansible-playbook -e "@variables/variables.yml" playbooks/variable-03-flag.yml
+ansible-playbook -e "@playbooks/vars_files/variables.yml" playbooks/variable-03-flag.yml
 ```
-```
-# vars_files
-# instead of passing the variable with -e flag file can be declared using vars_file tag
 
-cat playbooks/var_files/variables.yml
+#### include_vars
+```
+
+```
+
+#### vars_files
+```
+# Instead of passing the variable with -e flag file can be declared using vars_file tag
+
+cat playbooks/vars_files/variables.yml
 http_port: 80
 server_name: prod01
 
@@ -437,9 +413,40 @@ cat playbooks/variable-04-file.yml
       debug:
         msg: "{{ server_name }}"
 ```
-```
-# group_vars
 
+#### vars
+```
+# Items inside array can be accessed by the index number
+
+cat playbooks/variable-01.yml
+---
+- name: Basic variable
+  hosts: all
+  vars:
+    basic_var: My first variable
+  tasks:
+  - name: Display value
+    debug:
+      msg: "{{ basic_var }}"
+```
+```
+cat playbooks/variable-02-arrays.yml
+---
+- name: Variables
+  hosts: all
+  vars:
+    packages:
+      - git
+      - tree
+      - vim
+  tasks:
+  - name: Display value
+    debug:
+      msg: "{{ packages[0] }}"
+```
+
+### group_vars and host_vars
+```
 tree playbooks/group_vars
 group_vars
 |-- db
@@ -453,8 +460,6 @@ message: "Variable for db group"
 cat group_vars/web/variables.yml
 message: "Variable for web group"
 
-# host_vars
-
 tree playbooks/host_vars
 host_vars
 `-- server00
@@ -462,7 +467,6 @@ host_vars
 
 cat playbooks/host_vars/server00/variables.yml
 message: "Variable for server00 host"
-
 
 cat playbooks/variable-05-group-host.yml
 ---
@@ -472,6 +476,8 @@ cat playbooks/variable-05-group-host.yml
     - name: Display group and host variables
       debug:
         msg: "{{ message }}"
+
+# Note: group_vars will overwrite host_vars
 ```
 
 ### Loops
