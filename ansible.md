@@ -367,7 +367,8 @@ cat playbooks/register-01.yml
 
 ### Variables
 ```
-# group_vars > host_vars > vars > vars_files > vars task > include_vars > -e flag
+# Overwrite order
+# -e flag > include_vars > vars task > vars_files > vars > host_vars > group_vars
 ```
 
 #### -e flag
@@ -441,10 +442,10 @@ cat playbooks/variables-04-file.yml
 
 cat playbooks/variables-05-vars.yml
 ---
-- name: Basic variable
+- name: Variables
   hosts: all
   vars:
-    message: My first variable
+    message: Hello world
   tasks:
   - name: Display value
     debug:
@@ -617,12 +618,32 @@ cat playbooks/error-handling-01-failed.yml
     - name: Next Task
       debug:
         msg: "Next next task will not be executed"
+
+# Next task will not be executed after previous task error
 ```
 
 #### changed_when
 ```
 cat playbooks/error-handling-02-changed.yml
 ---
+- name: Error handling
+  hosts: server00
+  tasks:
+    - name: Time change
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        regexp: "^pool 2."
+        line: "server base iburst"
+      notify: restart chronyd
+      changed_when: true
+
+  handlers:
+    - name: restart chronyd
+      systemd:
+        name: chronyd
+        state: restarted
+
+# Change will be always detected causing handler to be always triggered
 ```
 
 #### ignore_errors
@@ -632,7 +653,7 @@ cat playbooks/error-handling-03-ignore.yml
 - name: Error handling
   hosts: server01
   vars:
-    package: saaamba
+    package: nginxxx
   tasks:
     - name: Trying to install {{ package }}
       apt:
@@ -644,6 +665,8 @@ cat playbooks/error-handling-03-ignore.yml
     - name: Next Task
       debug:
         msg: "Next task has been executed"
+
+# Next task will be executed even after previous task error
 ```
 
 ### Block

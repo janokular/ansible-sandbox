@@ -2,7 +2,7 @@
 - name: Variables
   hosts: all
   vars:
-    message: My first variable
+    message: Hello world
   tasks:
   - name: Display value
     debug:

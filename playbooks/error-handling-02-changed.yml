@@ -1,0 +1,17 @@
+---
+- name: Error handling
+  hosts: server00
+  tasks:
+    - name: Time change
+      lineinfile:
+        path: /etc/chrony/chrony.conf
+        regexp: "^pool 2."
+        line: "server base iburst"
+      notify: restart chronyd
+      changed_when: true
+
+  handlers:
+    - name: restart chronyd
+      systemd:
+        name: chronyd
+        state: restarted

@@ -2,7 +2,7 @@
 - name: Error handling
   hosts: server01
   vars:
-    package: saaamba
+    package: nginxxx
   tasks:
     - name: Trying to install {{ package }}
       apt:
