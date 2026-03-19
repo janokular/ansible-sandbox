@@ -370,7 +370,7 @@ cat playbooks/register-01.yml
 
 #### -e flag
 ```
-cat playbooks/variable-03-flag.yml
+cat playbooks/variables-01-flag.yml
 ---
 - name: Variables
   hosts: server01
@@ -383,10 +383,29 @@ cat playbooks/variable-03-flag.yml
         msg: "{{ server_name }}"
 
 # To run the playbook with external variable file use -e flag
-ansible-playbook -e "@playbooks/vars_files/variables.yml" playbooks/variable-03-flag.yml
+ansible-playbook -e "@playbooks/vars_files/variables.yml" playbooks/variables-01-flag.yml
 ```
 
 #### include_vars
+```
+cat playbooks/variables-02-include.yml
+---
+- name: Variables
+  hosts: server01
+  vars:
+    emoji: ":("
+  tasks:
+    - name: Display emoji variable
+      debug:
+        msg: "{{ emoji }}"
+    - name: include_vars
+      include_vars: vars_files/emoji.yml
+    - name: Display new emoji variable
+      debug:
+        msg:  "{{ emoji }}"
+```
+
+#### vars task
 ```
 
 ```
@@ -399,7 +418,7 @@ cat playbooks/vars_files/variables.yml
 http_port: 80
 server_name: prod01
 
-cat playbooks/variable-04-file.yml
+cat playbooks/variables-04-file.yml
 ---
 - name: Variables
   vars_files:
@@ -418,19 +437,19 @@ cat playbooks/variable-04-file.yml
 ```
 # Items inside array can be accessed by the index number
 
-cat playbooks/variable-01.yml
+cat playbooks/variables-05-vars.yml
 ---
 - name: Basic variable
   hosts: all
   vars:
-    basic_var: My first variable
+    message: My first variable
   tasks:
   - name: Display value
     debug:
-      msg: "{{ basic_var }}"
+      msg: "{{ message }}"
 ```
 ```
-cat playbooks/variable-02-arrays.yml
+cat playbooks/variables-06-arrays.yml
 ---
 - name: Variables
   hosts: all
@@ -445,7 +464,7 @@ cat playbooks/variable-02-arrays.yml
       msg: "{{ packages[0] }}"
 ```
 
-### group_vars and host_vars
+#### group_vars and host_vars
 ```
 tree playbooks/group_vars
 group_vars
@@ -468,7 +487,7 @@ host_vars
 cat playbooks/host_vars/server00/variables.yml
 message: "Variable for server00 host"
 
-cat playbooks/variable-05-group-host.yml
+cat playbooks/variables-07-group-host.yml
 ---
 - name: Variables
   hosts: all  
@@ -557,9 +576,29 @@ cat playbooks/loops-03.yml
         - { user: bob, group: admin }
 ```
 
-### When
+### Conditions
+#### when
+```
+cat conditions-01-when.yml
+---
 ```
 
+#### failed_when
+```
+cat conditions-02-failed.yml
+---
+```
+
+#### changed_when
+```
+cat conditions-03-changed.yml
+---
+```
+
+#### ignore_errors
+```
+cat conditions-04-ignore.yml
+---
 ```
 
 ### Block

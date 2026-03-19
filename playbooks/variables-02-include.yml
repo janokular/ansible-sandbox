@@ -1,0 +1,14 @@
+---
+- name: Variables
+  hosts: server01
+  vars:
+    emoji: ":("
+  tasks:
+    - name: Display emoji variable
+      debug:
+        msg: "{{ emoji }}"
+    - name: include_vars
+      include_vars: vars_files/emoji.yml
+    - name: Display new emoji variable
+      debug:
+        msg:  "{{ emoji }}"

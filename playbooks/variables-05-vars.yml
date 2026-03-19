@@ -2,8 +2,8 @@
 - name: Variables
   hosts: all
   vars:
-    basic_var: My first variable
+    message: My first variable
   tasks:
   - name: Display value
     debug:
-      msg: "{{ basic_var }}"
+      msg: "{{ message }}"
