@@ -1,0 +1,12 @@
+---
+- name: Templates
+  hosts: server01
+  vars_files: vars_files/variables.yml
+  tasks:
+    - name: Template
+      template:
+        src: templates/template.j2
+        dest: /tmp
+        owner: root
+        group: root
+        mode: 0644

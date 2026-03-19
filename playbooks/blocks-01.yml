@@ -1,0 +1,24 @@
+---
+- name: Blocks
+  hosts: server01
+  vars:
+    package: nginxxx
+  tasks:
+    - block:
+        - name: Trying to install {{ package }}
+          apt:
+            name: "{{ package  }}"
+            state: present
+            update_cache: true
+      rescue:
+        - name: Rescue block
+          debug:
+            msg: "Executes on rescue, when task inside a block ends with an error!"
+      always:
+        - name: Always block
+          debug:
+            msg: "I am always executing!"
+
+    - name: Next task
+      debug:
+        msg: "Next task was started..."

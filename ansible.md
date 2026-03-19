@@ -669,19 +669,58 @@ cat playbooks/error-handling-03-ignore.yml
 # Next task will be executed even after previous task error
 ```
 
-### Block
+### Blocks
 ```
+cat playbooks/blocks-01.yml
+---
+- name: Blocks
+  hosts: server01
+  vars:
+    package: nginxxx
+  tasks:
+    - block:
+        - name: Trying to install {{ package }}
+          apt:
+            name: "{{ package  }}"
+            state: present
+            update_cache: true
+      rescue:
+        - name: Rescue block
+          debug:
+            msg: "Executes on rescue, when task inside a block ends with an error!"
+      always:
+        - name: Always block
+          debug:
+            msg: "I am always executing!"
 
+    - name: Next task
+      debug:
+        msg: "Next task was started..."
 ```
 
 ### Templates
 ```
+cat playbooks/vars_files/variables.yml
+http_port: 80
+server_name: prod01
 
-```
+cat templates/template.j2
+server name:  {{ server_name }}
+http_port:    {{ http_port }}
 
-### Roles
-```
-
+cat playbooks/templates-01.yml
+---
+- name: Templates
+  hosts: server01
+  vars_files: vars_files/variables.yml
+  tasks:
+    - name: Template
+      template:
+        src: templates/template.j2
+        dest: /tmp
+        owner: root
+        group: root
+        mode: 0644
 ```
 
 ### Vault
@@ -695,4 +734,9 @@ ansible-vault edit playbook.yml
 ansible-vault decrypt playbook.yml
 
 # Variables can be also encrypted
+```
+
+### Roles
+```
+
 ```
