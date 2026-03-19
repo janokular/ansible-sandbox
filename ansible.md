@@ -35,7 +35,8 @@ ansible-doc -l
 # Templates:            hyphens-hyphens.j2
 ```
 
-### inventory.ini
+### Setup
+#### inventory.ini
 ```
 server00
 
@@ -71,7 +72,7 @@ ansible-inventory --list
 ansible-invenotry --list --yaml
 ```
 
-### ansible.cfg
+#### ansible.cfg
 ```
 [defaults]
 remote_user = ansible
@@ -86,13 +87,14 @@ become_user = root
 log_path = /var/log/ansible.log
 ```
 
-### Running Ansible from CLI
+#### Running Ansible from CLI
 ```
 # -i flag is not needed after configuring ansible.cfg
 ansible server01 -i inventory.ini -m module_name -a arguments
 ```
 
-### Some core modules (?)
+### Modules
+#### Some Core Modules (?)
 ```
 # user
 ansible all -m user -a 'name=john comment="User IT" uid=2001'
@@ -152,9 +154,9 @@ ansible all -m parted -a ''
 ansible all -m filesystem -a ''
 ```
 
-### Ansible Galaxy
+#### Ansible Galaxy
 ```
-# list all installed collections
+# List all installed collections
 ansible-galaxy collection list
 
 # Install ansible.posix collection
@@ -166,7 +168,7 @@ ansible-doc ansible.posix -l
 ansible server01 -m firewalld -a 'service=http state=enabled immediate=yes permanent=yes'
 ```
 
-### Scripting example
+### Scripting
 ```
 cat scripts/script-01.sh
 #!/bin/bash
