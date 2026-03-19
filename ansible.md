@@ -576,28 +576,41 @@ cat playbooks/loops-03.yml
         - { user: bob, group: admin }
 ```
 
-### Conditions
-#### when
+### Conditionals
+#### Ansible facts
 ```
-cat conditions-01-when.yml
----
+ansible server01 -m ansible.builtin.setup
 ```
 
+#### when
+```
+cat playbooks/conditionals-01.yml
+---
+- name: Conditions
+  hosts: server01
+  tasks:
+    - name: Display message on condition
+      debug:
+        msg: "Host is running Ubuntu distribution"
+      when: ansible_distribution == "Ubuntu"
+```
+
+### Error Handling
 #### failed_when
 ```
-cat conditions-02-failed.yml
+cat playbooks/error-handling-01-failed.yml
 ---
 ```
 
 #### changed_when
 ```
-cat conditions-03-changed.yml
+cat playbooks/error-handling-02-changed.yml
 ---
 ```
 
 #### ignore_errors
 ```
-cat conditions-04-ignore.yml
+cat playbooks/error-handling-03-ignore.yml
 ---
 ```
 
@@ -618,5 +631,13 @@ cat conditions-04-ignore.yml
 
 ### Vault
 ```
+ansible-vault encrypt playbook.yml
+ansible-playbook.yml playbook.yml --ask-vault-pass
 
+ansible-vault view playbook.yml
+ansible-vault edit playbook.yml
+
+ansible-vault decrypt playbook.yml
+
+# Variables can be also encrypted
 ```

@@ -1,0 +1,8 @@
+---
+- name: Conditions
+  hosts: server01
+  tasks:
+    - name: Display message on condition
+      debug:
+        msg: "Host is running Ubuntu distribution"
+      when: ansible_distribution == "Ubuntu"
