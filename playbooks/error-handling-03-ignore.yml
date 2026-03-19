@@ -1,0 +1,16 @@
+---
+- name: Error handling
+  hosts: server01
+  vars:
+    package: saaamba
+  tasks:
+    - name: Trying to install {{ package }}
+      apt:
+        name: "{{ package  }}"
+        state: present
+        update_cache: true
+      ignore_errors: true
+    
+    - name: Next Task
+      debug:
+        msg: "Next task has been executed"

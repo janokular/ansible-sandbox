@@ -602,6 +602,21 @@ cat playbooks/conditionals-01.yml
 ```
 cat playbooks/error-handling-01-failed.yml
 ---
+- name: Error handling
+  hosts: server01
+  vars:
+    package: nginx
+  tasks:
+    - name: Trying to install {{ package }}
+      apt:
+        name: "{{ package  }}"
+        state: present
+        update_cache: true
+      failed_when: ansible_memfree_mb < 1000
+
+    - name: Next Task
+      debug:
+        msg: "Next next task will not be executed"
 ```
 
 #### changed_when
@@ -614,6 +629,21 @@ cat playbooks/error-handling-02-changed.yml
 ```
 cat playbooks/error-handling-03-ignore.yml
 ---
+- name: Error handling
+  hosts: server01
+  vars:
+    package: saaamba
+  tasks:
+    - name: Trying to install {{ package }}
+      apt:
+        name: "{{ package  }}"
+        state: present
+        update_cache: true
+      ignore_errors: true
+    
+    - name: Next Task
+      debug:
+        msg: "Next task has been executed"
 ```
 
 ### Block
