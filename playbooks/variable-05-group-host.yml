@@ -1,0 +1,7 @@
+---
+- name: Variables
+  hosts: all  
+  tasks:
+    - name: Display group and host variables
+      debug:
+        msg: "{{ message }}"

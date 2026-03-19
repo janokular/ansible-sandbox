@@ -453,11 +453,6 @@ message: "Variable for db group"
 cat group_vars/web/variables.yml
 message: "Variable for web group"
 
-cat playbooks/variable-05-group.yml
----
-```
-
-```
 # host_vars
 
 tree playbooks/host_vars
@@ -469,8 +464,14 @@ cat playbooks/host_vars/server00/variables.yml
 message: "Variable for server00 host"
 
 
-cat playbooks/variable-06-host.yml
+cat playbooks/variable-05-group-host.yml
 ---
+- name: Variables
+  hosts: all  
+  tasks:
+    - name: Display group and host variables
+      debug:
+        msg: "{{ message }}"
 ```
 
 ### Loops
