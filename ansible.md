@@ -705,8 +705,15 @@ http_port: 80
 server_name: prod01
 
 cat templates/template.j2
+----------
+Data taken from Ansible facts
+hostname:     {{ ansible_facts['hostname'] }}
+distro:       {{ ansible_facts['distribution'] | upper }}
+
+Data taken from variable file
 server name:  {{ server_name }}
-http_port:    {{ http_port }}
+http port:    {{ http_port }}
+----------
 
 cat playbooks/templates-01.yml
 ---
