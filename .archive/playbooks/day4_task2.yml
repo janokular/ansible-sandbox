@@ -1,6 +1,6 @@
 ---
 - name: SFTP configuration
-  hosts: poznan
+  hosts: all
   tasks:
     - name: SFTP instalaltion
       dnf:
@@ -31,6 +31,7 @@
         line: "anonymous_enable=YES"
       notify:
         - restart sftp
+
   handlers:
     - name: restart sftp
       service:

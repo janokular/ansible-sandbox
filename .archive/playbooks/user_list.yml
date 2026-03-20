@@ -1,3 +1,0 @@
-users:
-  - { name: "john", group: "administrator" }
-  - { name: "bob", group: "admin" }

@@ -7,7 +7,6 @@
       - Debian
       - RedHat
       - Rocky
-
   tasks:
   - name: ...
     dnf:

@@ -1,5 +1,5 @@
 ---
 - name: php role call
-  hosts: poznan
+  hosts: all
   roles:
     - php

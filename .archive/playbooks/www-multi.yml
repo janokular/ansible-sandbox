@@ -1,8 +1,7 @@
 ---
 - name: WWW web server implementation for gdynia host
-  hosts: gdansk
+  hosts: all
   tasks:
-
     - name: httpd installation
       yum:
         name: httpd
@@ -29,7 +28,6 @@
 - name: WWW web server implementation for krakow host
   hosts: katowice
   tasks:
-
     - name: httpd installation
       yum:
         name: httpd
@@ -56,7 +54,6 @@
 - name: Service test
   hosts: localhost
   tasks:
-
     - name: gdansk connection test
       uri:
         url: http://gdansk

@@ -1,6 +1,6 @@
 ---
 - name: httpd startup on unspecified port
-  hosts: servers
+  hosts: all
   vars:
     http_port: 12345
   tasks:

@@ -1,7 +1,0 @@
----
-- name: Task testing
-  hosts: gdansk
-  tasks:
-    - name: Whoami
-      shell: "whoami"
-      failed_when: true

@@ -30,6 +30,7 @@
         state: enabled
         permanent: yes
         immediate: true
+
   handlers:
     - name: rsyslog restart
       systemd:
@@ -46,6 +47,7 @@
         path: /etc/rsyslog.conf
         line: "*.* @katowice"
       notify: rsyslog restart
+
   handlers:
     - name: rsyslog restart
       systemd:

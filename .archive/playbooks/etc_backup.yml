@@ -2,7 +2,6 @@
 - name: /etc backup
   hosts: all
   tasks:
-
     - name: /etc_backup folder creation
       file:
         path: /etc_backup

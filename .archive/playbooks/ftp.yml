@@ -1,8 +1,7 @@
 ---
 - name: server vsftpd on gdansk server
-  hosts: gdansk
+  hosts: all
   tasks:
-
     - name: vsftpd installation
       yum:
         name: vsftpd
@@ -24,7 +23,6 @@
 - name: ftp installation on katowice host
   hosts: katowice
   tasks:
-
     - name: ftp installation
       yum:
         name: ftp

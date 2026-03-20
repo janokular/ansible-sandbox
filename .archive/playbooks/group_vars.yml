@@ -1,7 +1,0 @@
----
-- name: test
-  hosts: all
-  tasks:
-    - name: Install {{ package }}
-      debug:
-        msg:  "installing {{ package }}"

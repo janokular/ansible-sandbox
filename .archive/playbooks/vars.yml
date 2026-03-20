@@ -1,3 +1,0 @@
-ftp_package: vsftpd
-ftp_firewall: ftp
-ftp_service: vsftpd

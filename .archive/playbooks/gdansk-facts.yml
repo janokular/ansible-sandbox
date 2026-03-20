@@ -1,6 +1,6 @@
 ---
 - name: Install package from facts
-  hosts: gdansk
+  hosts: all
   tasks:
     - name: Install package
       dnf:
