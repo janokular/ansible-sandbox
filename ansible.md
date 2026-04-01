@@ -745,5 +745,99 @@ ansible-vault decrypt playbook.yml
 
 ### Roles
 ```
+# Creating a role
+mkdir roles/
+ansible-galaxy init roles/rolename
+
+# Roles folder structure
+tree roles/rolename
+roles/rolename
+|-- README.md
+|-- defaults
+|   `-- main.yml
+|-- files
+|-- handlers
+|   `-- main.yml
+|-- meta
+|   `-- main.yml
+|-- tasks
+|   `-- main.yml
+|-- templates
+|-- tests
+|   |-- inventory
+|   `-- test.yml
+`-- vars
+    `-- main.yml
+```
+```
+mkdir roles/
+ansible-galaxy init roles/apache
+
+tree roles/apache
+roles/apache
+|-- README.md
+|-- defaults
+|   `-- main.yml
+|-- files
+|-- handlers
+|   `-- main.yml
+|-- meta
+|   `-- main.yml
+|-- tasks
+|   `-- main.yml
+|-- templates
+|-- tests
+|   |-- inventory
+|   `-- test.yml
+`-- vars
+    `-- main.yml
+
+# Inside roles directory but outside apache directory
+# Create roles-01-apache.yml (starting point)
+cat roles/roles-01-apache.yml
+---
+- name: Roles
+  hosts: web
+  roles:
+    - apache
+
+cat roles/apache/handlers/main.yml
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for apache
+- name: reload apache
+  service:
+    name: apache2
+    state: reloaded
+
+cat roles/apache/tasks/main.yml
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for apache
+- name: Installing Apache
+  apt:
+    name: apache2
+    state: latest
+    update_cache: true
+
+- name: Creating HTML page
+  shell:
+    cmd: echo "Hello From The Ansible" > /var/www/html/index.html
+  args:
+    executable: /bin/bash
+  notify:
+    - reload apache
+
+- name: Public IP
+  shell:
+    cmd: ip -4 -br a
+  register: ip
+
+- debug: var=ip.stdout_lines
+
+ansible-playbook roles/roles-01-apache.yml
+```
+```
+# Previous role clean up
 
 ```

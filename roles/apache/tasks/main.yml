@@ -1,0 +1,23 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for apache
+- name: Installing Apache
+  apt:
+    name: apache2
+    state: latest
+    update_cache: true
+
+- name: Creating HTML page
+  shell:
+    cmd: echo "Hello From The Ansible" > /var/www/html/index.html
+  args:
+    executable: /bin/bash
+  notify:
+    - reload apache
+
+- name: Public IP
+  shell:
+    cmd: ip -4 -br a
+  register: ip
+
+- debug: var=ip.stdout_lines
