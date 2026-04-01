@@ -3,3 +3,4 @@
   hosts: web
   roles:
     - apache
+    - apache_cleanup

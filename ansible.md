@@ -29,7 +29,7 @@ ansible-doc -l
 # Hosts:                lowercase
 
 # Playbooks:            hyphens-hyphens.yml
-# Roles:                lowercase
+# Roles:                underscores_underscores.yml
 # Variables:            underscores_underscores.yml
 # Handlers:             lowercase spaces descriptive
 # Templates:            hyphens-hyphens.j2
@@ -747,11 +747,11 @@ ansible-vault decrypt playbook.yml
 ```
 # Creating a role
 mkdir roles/
-ansible-galaxy init roles/rolename
+ansible-galaxy init roles/role_name
 
 # Roles folder structure
-tree roles/rolename
-roles/rolename
+tree roles/role_name
+roles/role_name
 |-- README.md
 |-- defaults
 |   `-- main.yml
@@ -835,9 +835,40 @@ cat roles/apache/tasks/main.yml
 
 - debug: var=ip.stdout_lines
 
+cat roles/roles-01-apache.yml
+---
+- name: Roles
+  hosts: web
+  roles:
+    - apache
+
 ansible-playbook roles/roles-01-apache.yml
 ```
 ```
 # Previous role clean up
+ansible-galaxy init roles/apache_cleanup
 
+cat roles/apache_cleanup/tasks/main.yml
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/apache_cleanup
+- name: Uninstalling Apache
+  apt:
+    name: apache2
+    state: absent
+
+- name: Remove index.html
+  file:
+    path: /var/www/html/index.html
+    state: absent
+
+cat roles/roles-01-apache.yml
+---
+- name: Roles
+  hosts: web
+  roles:
+    - apache
+    - apache_cleanup
+
+ansible-playbook roles/roles-01-apache.yml
 ```
