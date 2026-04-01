@@ -851,7 +851,7 @@ ansible-galaxy init roles/apache_cleanup
 cat roles/apache_cleanup/tasks/main.yml
 #SPDX-License-Identifier: MIT-0
 ---
-# tasks file for roles/apache_cleanup
+# tasks file for roles/apache_cleanup/tasks/main.yml
 - name: Uninstalling Apache
   apt:
     name: apache2
