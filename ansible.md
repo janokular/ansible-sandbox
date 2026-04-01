@@ -160,12 +160,15 @@ ansible all -m filesystem -a ''
 ansible-galaxy collection list
 
 # Install ansible.posix collection
-ansbile-galaxy collection install ansible.posix
+ansible-galaxy collection install ansible.posix
 
 # Check modules installed with ansible.posix collection
 ansible-doc ansible.posix -l
 
 ansible server01 -m firewalld -a 'service=http state=enabled immediate=yes permanent=yes'
+
+# Dependencies from Ansible Galaxy (Roles/Collections) can be saved inside requirements.yml file
+# user -r flag and specify path to requirements.yml file
 ```
 
 ### Scripting
