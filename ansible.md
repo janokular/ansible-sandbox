@@ -266,6 +266,104 @@ cat playbooks/playbook-03-service.yml
         name: nginx
         state: absent
 ```
+```
+cat playbooks/playbook-04-backup.yml
+---
+- name: Playbook
+  hosts: all
+  tasks:
+    - name: Create /vagrant-backup directory
+      file:
+        path: /vagrant-backup
+        owner: root
+        group: root
+        mode: 0644
+        state: directory
+
+    - name: Compress /vagrant directory into /vagrant-backup/vagrant.zip
+      archive:
+        path: /vagrant
+        dest: /vagrant-backup/vagrant.zip
+        format: zip
+
+    - name: Download archive from host(s) to control node
+      fetch:
+        src: /vagrant-backup/vagrant.zip
+        dest: /tmp
+
+# On control node machine check /tmp directory
+ls /tmp/
+```
+```
+cat playbooks/playbook-05-rsyslog.yml
+---
+- name: Playbook
+  hosts: all
+  tasks:
+    - name: Install rsyslog
+      apt:
+        name: rsyslog
+        state: latest
+        update_cache: true
+
+    - name: Start rsyslog
+      systemd:
+        name: rsyslog
+        state: started
+        enabled: true
+
+- name: Playbook
+  hosts: server00
+  tasks:
+    - name: Configure rsyslog
+      lineinfile:
+        path: /etc/rsyslog.conf
+        regexp: "{{ item.find }}"
+        line: "{{ item.replace }}"
+      loop:
+        - { find: '^#module(load="imudp")' , replace: 'module(load="imudp")' }
+        - { find: '^#input(type="imudp" port="514")' , replace: 'input(type="imudp" port="514")' }
+      notify: restart rsyslog
+
+    - name: Install firewalld
+      apt:
+        name: firewalld
+        state: latest
+        update_cache: true
+
+    - name: Configure firewalld
+      firewalld:
+        port: 514/udp
+        state: enabled
+        permanent: true
+        immediate: true
+
+  handlers:
+    - name: restart rsyslog
+      systemd:
+        name: rsyslog
+        state: restarted
+
+- name: Playbook
+  hosts:
+    - server01
+    - server02
+  tasks:
+    - name: Edit rsyslog.conf
+      lineinfile:
+        path: /etc/rsyslog.conf
+        line: "*.* @172.16.10.11"
+      notify: restart rsyslog
+
+  handlers:
+    - name: restart rsyslog
+      systemd:
+        name: rsyslog
+        state: restarted
+
+# On server00 check the /var/log/syslog
+sudo tail -f /var/log/syslog
+```
 
 ### Handlers
 ```

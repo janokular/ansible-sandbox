@@ -1,0 +1,22 @@
+---
+- name: Playbook
+  hosts: all
+  tasks:
+    - name: Create /vagrant-backup directory
+      file:
+        path: /vagrant-backup
+        owner: root
+        group: root
+        mode: 0644
+        state: directory
+
+    - name: Compress /vagrant directory into /vagrant-backup/vagrant.zip
+      archive:
+        path: /vagrant
+        dest: /vagrant-backup/vagrant.zip
+        format: zip
+
+    - name: Download archive from host(s) to control node
+      fetch:
+        src: /vagrant-backup/vagrant.zip
+        dest: /tmp

@@ -1,21 +1,23 @@
 ---
-- name: rsyslog
+- name: Playbook
   hosts: all
   tasks:
-    - name: rsyslog installation
-      dnf:
+    - name: Install rsyslog
+      apt:
         name: rsyslog
         state: latest
-    - name: rsyslog startup and autostart
+        update_cache: true
+
+    - name: Start rsyslog
       systemd:
         name: rsyslog
         state: started
-        enabled: yes
+        enabled: true
 
-- name: katowice setup
-  hosts: katowice
+- name: Playbook
+  hosts: server00
   tasks:
-    - name: rsyslog config
+    - name: Configure rsyslog
       lineinfile:
         path: /etc/rsyslog.conf
         regexp: "{{ item.find }}"
@@ -23,33 +25,40 @@
       loop:
         - { find: '^#module(load="imudp")' , replace: 'module(load="imudp")' }
         - { find: '^#input(type="imudp" port="514")' , replace: 'input(type="imudp" port="514")' }
-      notify: rsyslog restart
-    - name: firewalld config
+      notify: restart rsyslog
+
+    - name: Install firewalld
+      apt:
+        name: firewalld
+        state: latest
+        update_cache: true
+
+    - name: Configure firewalld
       firewalld:
         port: 514/udp
         state: enabled
-        permanent: yes
+        permanent: true
         immediate: true
 
   handlers:
-    - name: rsyslog restart
+    - name: restart rsyslog
       systemd:
         name: rsyslog
         state: restarted
 
-- name: poznan and gdansk setup
+- name: Playbook
   hosts:
-    - poznan
-    - gdansk
+    - server01
+    - server02
   tasks:
-    - name: rsyslog config
+    - name: Edit rsyslog.conf
       lineinfile:
         path: /etc/rsyslog.conf
-        line: "*.* @katowice"
-      notify: rsyslog restart
+        line: "*.* @172.16.10.11"
+      notify: restart rsyslog
 
   handlers:
-    - name: rsyslog restart
+    - name: restart rsyslog
       systemd:
         name: rsyslog
         state: restarted
