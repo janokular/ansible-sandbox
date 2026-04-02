@@ -1,8 +1,0 @@
----
-- name: Install package from facts
-  hosts: all
-  tasks:
-    - name: Install package
-      dnf:
-        name: "{{ ansible_local['custom']['requests']['package']}}"
-        state: "{{ ansible_local['custom']['requests']['state']}}"
