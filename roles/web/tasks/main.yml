@@ -1,0 +1,10 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/web_server
+- name: Install Apache
+  apt:
+    name: apache2
+    state: latest
+    update_cache: true
+  notify:
+    - start web server

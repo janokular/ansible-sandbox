@@ -1,7 +1,7 @@
 ---
-- name: Display facts
+- name: Facts
   hosts: all
   tasks:
-    - name: "== FACTS =="
+    - name: Display Ansible facts
       debug:
         msg: "{{ ansible_fqdn }} {{ ansible_default_ipv4.address }} {{ ansible_memory_mb.real.total }}"

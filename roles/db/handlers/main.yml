@@ -1,0 +1,7 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for roles/db
+- name: start db
+  service:
+    name: "{{ db_server }}"
+    state: started

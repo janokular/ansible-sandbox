@@ -587,6 +587,26 @@ cat playbooks/loops-03.yml
 ```
 ansible server01 -m ansible.builtin.setup
 ```
+```
+cat playbooks/facts-01.yml
+---
+- name: Facts
+  hosts: all
+  tasks:
+    - name: Display Ansible facts
+      debug:
+        msg: "{{ ansible_fqdn }} {{ ansible_default_ipv4.address }} {{ ansible_memory_mb.real.total }}"
+```
+```
+cat playbooks/facts-02.yml
+---
+- name: Facts
+  hosts: all
+  tasks:
+    - name: Display more Ansible facts
+      debug:
+        msg: "{{ ansible_hostname }} has {{ ansible_memfree_mb }}Mb of free RAM & {{ ansible_processor_count }} CPU core(s)"
+```
 
 #### when
 ```
@@ -599,6 +619,38 @@ cat playbooks/conditionals-01.yml
       debug:
         msg: "Host is running Ubuntu distribution"
       when: ansible_distribution == "Ubuntu"
+```
+```
+cat playbooks/conditionals-02.yml
+---
+- name: Conditionals
+  hosts: db
+  vars:
+    min_ram_mb: 200
+    supported_distros:
+      - RedHat
+      - Fedora
+      - CentOS
+  tasks:
+  - name: Install db
+    dnf:
+      name: mariadb
+      state: latest
+    when:
+      - ansible_memtotal_mb < min_ram_mb
+      - ansible_distribution in supported_distros
+
+  - name: "error: Not enough RAM"
+    debug:
+      msg: "{{ inventory_hostname }} has {{ ansible_memtotal_mb }}Mb of total RAM and should have at least {{ min_ram_mb }}Mb"
+    when:
+      - ansible_memtotal_mb < min_ram_mb
+
+  - name: "error: Unsupported distribution"
+    debug:
+      msg: "{{ inventory_hostname }} distribution ({{ ansible_distribution }}) is not supported"
+    when:
+      - ansible_distribution not in supported_distros
 ```
 
 ### Error Handling
