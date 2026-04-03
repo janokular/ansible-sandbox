@@ -1025,3 +1025,11 @@ cat roles/roles-01-apache.yml
 
 ansible-playbook roles/roles-01-apache.yml
 ```
+
+### Optimization 
+```
+gather_facts: false
+strategy: free
+serial:
+  - 50%
+```
