@@ -1,5 +1,0 @@
----
-- name: Web role call
-  hosts: web
-  roles:
-    - web
