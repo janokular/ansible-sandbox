@@ -93,68 +93,358 @@ log_path = /var/log/ansible.log
 ansible server01 -i inventory.ini -m module_name -a arguments
 ```
 
-### Modules
-#### Some Core Modules (?)
-```
-# user
-ansible all -m user -a 'name=john comment="User IT" uid=2001'
+### ansible.builtin modules
+`add_host`
+<dl>
+    <dd>Add a host (and alternatively a group) to the ansible-playbook in-memory inventory</dd>
+</dl>
 
-# command
-ansible all -m command -a id
+`apt`
+<dl>
+    <dd>Manages apt-packages</dd>
+</dl>
 
-# shell
-ansible all -m shell -a 'cat /etc/passwd | grep charles'
+`apt_key`
+<dl>
+    <dd>Add or remove an apt key</dd>
+</dl>
 
-# apt
-ansible all -m apt -a ''
+`apt_repository`
+<dl>
+    <dd>Add and remove APT repositories</dd>
+</dl>
 
-# dnf
-ansible all -m dnf -a 'name=nfs-utils state=latest'
+`assemble`
+<dl>
+    <dd>Assemble configuration files from fragments</dd>
+</dl>
 
-# yum
-ansible all -m yum -a 'name=cifs-utils state=latest'
+`assert`
+<dl>
+    <dd>Asserts given expressions are true</dd>
+</dl>
 
-# systemd
-ansible all -m systemd -a 'name=crond state=restarted'
+`async_status`
+<dl>
+    <dd>Obtain status of asynchronous task</dd>
+</dl>
 
-# service
-ansible all -m service -a ''
+`blockinfile`
+<dl>
+    <dd>Insert/update/remove a text block surrounded by marker lines</dd>
+</dl>
 
-# lineinfile
-ansible all -m lineinfile -a ''
+`command`
+<dl>
+    <dd>Execute commands on targets</dd>
+</dl>
 
-# file
-ansible all -m file -a ''
+`copy`
+<dl>
+    <dd>Copy files to remote locations</dd>
+</dl>
 
-# archive
-ansible all -m archive -a ''
+`cron`
+<dl>
+    <dd>Manage cron.d and crontab entries</dd>
+</dl>
 
-# fetch
-ansible all -m fetch -a 'src=/etc/hosts dest=/tmp'
+`deb822_repository`
+<dl>
+    <dd>Add and remove deb822 formatted repositories</dd>
+</dl>
 
-# setup
-ansible all -m setup
+`debconf`
+<dl>
+    <dd>Configure a .deb package</dd>
+</dl>
 
-# execute command on the system without ansible 
-ansible all -u student --ask-pass --become --become-method=sudo --become-user=root --ask-become-pass -m shell -a id
+`debug`
+<dl>
+    <dd>Print statements during execution</dd>
+</dl>
 
-# find
-ansible all -m find -a 'paths=/var/log size=1m'
+`dnf`
+<dl>
+    <dd>Manages packages with the dnf package manager</dd>
+</dl>
 
-# blockinfile
-ansible all -m blockinfile -a 'path=/etc/hosts block=|first line\nsecondline' (?)
+`dnf5`
+<dl>
+    <dd>Manages packages with the dnf5 package manager</dd>
+</dl>
 
-# mount
-ansible all -m mount -a ''
+`dpkg_selections`
+<dl>
+    <dd>Dpkg package selection selections</dd>
+</dl>
 
-# parted
-ansible all -m parted -a ''
+`expect`
+<dl>
+    <dd>Executes a command and responds to prompts</dd>
+</dl>
 
-# filesystem
-ansible all -m filesystem -a ''
-```
+`fail`
+<dl>
+    <dd>Fail with custom message</dd>
+</dl>
 
-#### Ansible Galaxy
+`fetch`
+<dl>
+    <dd>Fetch files from remote nodes</dd>
+</dl>
+
+`file`
+<dl>
+    <dd>Manage files and file properties</dd>
+</dl>
+
+`find`
+<dl>
+    <dd>Return a list of files based on specific criteria</dd>
+</dl>
+
+`gather_facts`
+<dl>
+    <dd>Gathers facts about remote hosts</dd>
+</dl>
+
+`get_url`
+<dl>
+    <dd>Downloads files from HTTP, HTTPS, or FTP to node</dd>
+</dl>
+
+`getent`
+<dl>
+    <dd>A wrapper to the unix getent utility</dd>
+</dl>
+
+`git`
+<dl>
+    <dd>Deploy software (or files) from git checkouts</dd>
+</dl>
+
+`group`
+<dl>
+    <dd>Add or remove groups</dd>
+</dl>
+
+`group_by`
+<dl>
+    <dd>Create Ansible groups based on facts</dd>
+</dl>
+
+`hostname`
+<dl>
+    <dd>Manage hostname</dd>
+</dl>
+
+`import_playbook`
+<dl>
+    <dd>Import a playbook</dd>
+</dl>
+
+`import_role`
+<dl>
+    <dd>Import a role into a play</dd>
+</dl>
+
+`import_tasks`
+<dl>
+    <dd>Import a task list</dd>
+</dl>
+
+`include_role`
+<dl>
+    <dd>Load and execute a role</dd>
+</dl>
+
+`include_tasks`
+<dl>
+    <dd>Dynamically include a task list</dd>
+</dl>
+
+`include_vars`
+<dl>
+    <dd>Load variables from files, dynamically within a task</dd>
+</dl>
+
+`iptables`
+<dl>
+    <dd>Modify iptables rules</dd>
+</dl>
+
+`known_hosts`
+<dl>
+    <dd>Add or remove a host from the <code>known_hosts</code> file</dd>
+</dl>
+
+`lineinfile`
+<dl>
+    <dd>Manage lines in text files</dd>
+</dl>
+
+`meta`
+<dl>
+    <dd>Execute Ansible ‘actions’</dd>
+</dl>
+
+`mount_facts`
+<dl>
+    <dd>Retrieve mount information</dd>
+</dl>
+
+`package`
+<dl>
+    <dd>Generic OS package manager</dd>
+</dl>
+
+`package_facts`
+<dl>
+    <dd>Package information as facts</dd>
+</dl>
+
+`pause`
+<dl>
+    <dd>Pause playbook execution</dd>
+</dl>
+
+`ping`
+<dl>
+    <dd>Try to connect to host, verify a usable python and return <code>pong</code> on success</dd>
+</dl>
+
+`pip`
+<dl>
+    <dd>Manages Python library dependencies</dd>
+</dl>
+
+`raw`
+<dl>
+    <dd>Executes a low-down and dirty command</dd>
+</dl>
+
+`reboot`
+<dl>
+    <dd>Reboot a machine</dd>
+</dl>
+
+`replace`
+<dl>
+    <dd>Replace all instances of a particular string in a file using a back-referenced regular expression</dd>
+</dl>
+
+`rpm_key`
+<dl>
+    <dd>Adds or removes a gpg key from the rpm db</dd>
+</dl>
+
+`script`
+<dl>
+    <dd>Runs a local script on a remote node after transferring it</dd>
+</dl>
+
+`service`
+<dl>
+    <dd>Manage services</dd>
+</dl>
+
+`service_facts`
+<dl>
+    <dd>Return service state information as fact data</dd>
+</dl>
+
+`set_fact`
+<dl>
+    <dd>Set host variable(s) and fact(s)</dd>
+</dl>
+
+`set_stats`
+<dl>
+    <dd>Define and display stats for the current ansible run</dd>
+</dl>
+
+`setup`
+<dl>
+    <dd>Gathers facts about remote hosts</dd>
+</dl>
+
+`shell`
+<dl>
+    <dd>Execute shell commands on targets</dd>
+</dl>
+
+`slurp`
+<dl>
+    <dd>Slurps a file from remote nodes</dd>
+</dl>
+
+`stat`
+<dl>
+    <dd>Retrieve file or file system status</dd>
+</dl>
+
+`subversion`
+<dl>
+    <dd>Deploys a subversion repository</dd>
+</dl>
+
+`systemd_service`
+<dl>
+    <dd>Manage systemd units</dd>
+</dl>
+
+`sysvinit`
+<dl>
+    <dd>Manage SysV services</dd>
+</dl>
+
+`tempfile`
+<dl>
+    <dd>Creates temporary files and directories</dd>
+</dl>
+
+`template`
+<dl>
+    <dd>Template a file out to a target host</dd>
+</dl>
+
+`unarchive`
+<dl>
+    <dd>Unpacks an archive after (optionally) copying it from the local machine</dd>
+</dl>
+
+`uri`
+<dl>
+    <dd>Interacts with webservices</dd>
+</dl>
+
+`user`
+<dl>
+    <dd>Manage user accounts</dd>
+</dl>
+
+`validate_argument_spec`
+<dl>
+    <dd>Validate role argument specs</dd>
+</dl>
+
+`wait_for`
+<dl>
+    <dd>Waits for a condition before continuing</dd>
+</dl>
+
+`wait_for_connection`
+<dl>
+    <dd>Waits until remote system is reachable/usable</dd>
+</dl>
+
+`yum_repository`
+<dl>
+    <dd>Add or remove YUM repositories</dd>
+</dl>
+
+### Ansible Galaxy
 ```
 # List all installed collections
 ansible-galaxy collection list
