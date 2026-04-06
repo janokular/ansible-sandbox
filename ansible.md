@@ -93,7 +93,7 @@ log_path = /var/log/ansible.log
 ansible server01 -i inventory.ini -m module_name -a arguments
 ```
 
-### ansible.builtin modules
+### Modules ansible.builtin
 `add_host`
 <dl>
     <dd>Add a host (and alternatively a group) to the ansible-playbook in-memory inventory</dd>
