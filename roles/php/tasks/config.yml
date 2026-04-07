@@ -1,5 +1,5 @@
 ---
-- name: Port config
+- name: Port configuration
   lineinfile:
     path: /etc/httpd/conf/httpd.conf
     regexp: "^Listen"

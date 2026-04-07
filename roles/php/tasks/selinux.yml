@@ -1,5 +1,5 @@
 ---
-- name: SELinux - port policy
+- name: SELinux port policy
   seport:
     ports: "{{ port_num }}"
     proto: tcp

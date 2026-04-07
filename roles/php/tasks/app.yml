@@ -5,7 +5,7 @@
     dest: /var/www/html
   loop: "{{ files }}"
 
-- name: service Blog
+- name: Blog template
   template:
     src: blog.j2
     dest: /var/www/html/blog.html

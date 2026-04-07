@@ -1,14 +1,13 @@
 ---
-# Service related tasks
-
 - name: Package installation
-  dnf:
-    name: "{{ package }}"
+  apt:
+    name: "{{ packages }}"
     state: latest
+    update_cache: true
 
 - name: Service startup
   systemd:
     name: "{{ item }}"
     state: started
-    enabled: yes
-  loop: "{{ service }}"
+    enabled: true
+  loop: "{{ services }}"

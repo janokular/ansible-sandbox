@@ -1,7 +1,0 @@
----
-# handlers file for php
-- name: service restart
-  systemd:
-    name: "{{ item }}"
-    state: restarted
-  loop: "{{ service }}"

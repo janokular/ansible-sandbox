@@ -1,7 +1,0 @@
----
-- name: firewall config
-  firewalld:
-    port: '{{ port_num}}/tcp'
-    state: enabled
-    immediate: yes
-    permanent: yes

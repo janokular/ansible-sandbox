@@ -1,11 +1,11 @@
+#SPDX-License-Identifier: MIT-0
 ---
-# vars file for php
-
-package:
+# vars file for roles/php
+packages:
   - httpd
   - php
 
-service:
+services:
   - httpd
   - php-fpm
 
