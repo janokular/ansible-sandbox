@@ -642,7 +642,7 @@ cat playbooks/playbook-05-rsyslog.yml
     - name: Edit rsyslog.conf
       lineinfile:
         path: /etc/rsyslog.conf
-        line: "*.* @172.16.10.11"
+        line: "*.* @172.16.10.10"
       notify: restart rsyslog
 
   handlers:
