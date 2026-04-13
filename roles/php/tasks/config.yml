@@ -1,7 +1,0 @@
----
-- name: Port configuration
-  lineinfile:
-    path: /etc/httpd/conf/httpd.conf
-    regexp: "^Listen"
-    line: "Listen {{ port_num }}"
-  notify: service restart

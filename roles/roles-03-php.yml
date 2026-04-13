@@ -1,5 +1,0 @@
----
-- name: Roles
-  hosts: web
-  roles:
-    - php
