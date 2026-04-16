@@ -8,5 +8,5 @@
       - vim
   tasks:
   - name: Display value
-    debug:
+    ansible.builtin.debug:
       msg: "{{ packages[0] }}"

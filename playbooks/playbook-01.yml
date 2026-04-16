@@ -3,18 +3,18 @@
   hosts: all
   tasks:
     - name: Adding group
-      group:
+      ansible.builtin.group:
         name: it
         state: present
 
     - name: Adding user
-      user:
+      ansible.builtin.user:
         name: jan
         state: present
         group: it
 
     - name: Copying file
-      copy:
+      ansible.builtin.copy:
         src: ../files/file_01
         dest: /home/jan/
         owner: jan

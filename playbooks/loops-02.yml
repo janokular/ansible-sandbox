@@ -12,13 +12,13 @@
         group: "dev"
   tasks:
     - name: Group creation
-      group:
+      ansible.builtin.group:
         name: "{{ item }}"
         state: present
       loop: "{{ groups }}"
 
     - name: User creation
-      user:
+      ansible.builtin.user:
         name: "{{ item.name }}"
         state: present
         group: "{{ item.group }}"

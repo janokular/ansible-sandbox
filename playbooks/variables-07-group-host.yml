@@ -3,5 +3,5 @@
   hosts: all  
   tasks:
     - name: Display group and host variables
-      debug:
+      ansible.builtin.debug:
         msg: "{{ message }}"

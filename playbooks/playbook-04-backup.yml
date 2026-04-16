@@ -3,7 +3,7 @@
   hosts: all
   tasks:
     - name: Create /vagrant-backup directory
-      file:
+      ansible.builtin.file:
         path: /vagrant-backup
         owner: root
         group: root
@@ -11,12 +11,12 @@
         state: directory
 
     - name: Compress /vagrant directory into /vagrant-backup/vagrant.zip
-      archive:
+      community.general.archive:
         path: /vagrant
         dest: /vagrant-backup/vagrant.zip
         format: zip
 
     - name: Download archive from host(s) to control node
-      fetch:
+      ansible.builtin.fetch:
         src: /vagrant-backup/vagrant.zip
         dest: /tmp

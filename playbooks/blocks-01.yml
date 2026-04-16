@@ -6,19 +6,19 @@
   tasks:
     - block:
         - name: Trying to install {{ package }}
-          apt:
+          ansible.builtin.apt:
             name: "{{ package  }}"
             state: present
             update_cache: true
       rescue:
         - name: Rescue block
-          debug:
+          ansible.builtin.debug:
             msg: "Executes on rescue, when task inside a block ends with an error!"
       always:
         - name: Always block
-          debug:
+          ansible.builtin.debug:
             msg: "I am always executing!"
 
     - name: Next task
-      debug:
+      ansible.builtin.debug:
         msg: "Next task was started..."

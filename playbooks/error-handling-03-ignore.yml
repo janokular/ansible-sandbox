@@ -5,12 +5,12 @@
     package: nginxxx
   tasks:
     - name: Trying to install {{ package }}
-      apt:
+      ansible.builtin.apt:
         name: "{{ package  }}"
         state: present
         update_cache: true
       ignore_errors: true
     
     - name: Next Task
-      debug:
+      ansible.builtin.debug:
         msg: "Next task has been executed"

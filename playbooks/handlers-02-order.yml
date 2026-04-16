@@ -3,7 +3,7 @@
   hosts: all
   tasks:
     - name: Installing Nginx
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: present
         update_cache: yes
@@ -12,16 +12,16 @@
         - second handler (Removing Nginx)
 
     - name: Task after handlers
-      debug:
+      ansible.builtin.debug:
         msg: "I was executed before handlers"
 
   handlers:
     - name: first handler (Restarting Nginx)
-      systemd:
+      ansible.builtin.systemd_service:
         name: nginx
         state: restarted
 
     - name: second handler (Removing Nginx)
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: absent

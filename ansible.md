@@ -483,18 +483,18 @@ cat playbooks/playbook-01.yml
   hosts: all
   tasks:
     - name: Adding group
-      group:
+      ansible.builtin.group:
         name: it
         state: present
 
     - name: Adding user
-      user:
+      ansible.builtin.user:
         name: jan
         state: present
         group: it
 
     - name: Copying file
-      copy:
+      ansible.builtin.copy:
         src: ../files/file.txt
         dest: /home/jan/
         owner: jan
@@ -524,13 +524,13 @@ cat playbooks/playbook-02-apt.yml
   hosts: web
   tasks:
     - name: Installing Nginx
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: present
         update_cache: yes
 
     - name: Removing Nginx
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: absent
 ```
@@ -541,18 +541,18 @@ cat playbooks/playbook-03-service.yml
   hosts: web
   tasks:
     - name: Installing Nginx
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: present
         update_cache: yes
 
     - name: Restarting Nginx
-      service:
+      ansible.builtin.service:
         name: nginx
         state: restarted
 
     - name: Removing Nginx
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: absent
 ```
@@ -563,7 +563,7 @@ cat playbooks/playbook-04-backup.yml
   hosts: all
   tasks:
     - name: Create /vagrant-backup directory
-      file:
+      ansible.builtin.file:
         path: /vagrant-backup
         owner: root
         group: root
@@ -571,13 +571,13 @@ cat playbooks/playbook-04-backup.yml
         state: directory
 
     - name: Compress /vagrant directory into /vagrant-backup/vagrant.zip
-      archive:
+      community.general.archive:
         path: /vagrant
         dest: /vagrant-backup/vagrant.zip
         format: zip
 
     - name: Download archive from host(s) to control node
-      fetch:
+      ansible.builtin.fetch:
         src: /vagrant-backup/vagrant.zip
         dest: /tmp
 
@@ -591,13 +591,13 @@ cat playbooks/playbook-05-rsyslog.yml
   hosts: all
   tasks:
     - name: Install rsyslog
-      apt:
+      ansible.builtin.apt:
         name: rsyslog
         state: latest
         update_cache: true
 
     - name: Start rsyslog
-      systemd:
+      ansible.builtin.systemd_service:
         name: rsyslog
         state: started
         enabled: true
@@ -606,7 +606,7 @@ cat playbooks/playbook-05-rsyslog.yml
   hosts: server00
   tasks:
     - name: Configure rsyslog
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/rsyslog.conf
         regexp: "{{ item.find }}"
         line: "{{ item.replace }}"
@@ -616,13 +616,13 @@ cat playbooks/playbook-05-rsyslog.yml
       notify: restart rsyslog
 
     - name: Install firewalld
-      apt:
+      ansible.builtin.apt:
         name: firewalld
         state: latest
         update_cache: true
 
     - name: Configure firewalld
-      firewalld:
+      ansible.posix.firewalld:
         port: 514/udp
         state: enabled
         permanent: true
@@ -630,7 +630,7 @@ cat playbooks/playbook-05-rsyslog.yml
 
   handlers:
     - name: restart rsyslog
-      systemd:
+      ansible.builtin.systemd_service:
         name: rsyslog
         state: restarted
 
@@ -640,14 +640,14 @@ cat playbooks/playbook-05-rsyslog.yml
     - server02
   tasks:
     - name: Edit rsyslog.conf
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/rsyslog.conf
         line: "*.* @172.16.10.10"
       notify: restart rsyslog
 
   handlers:
     - name: restart rsyslog
-      systemd:
+      ansible.builtin.systemd_service:
         name: rsyslog
         state: restarted
 
@@ -665,7 +665,7 @@ cat playbooks/handlers-01.yml
   hosts: web
   tasks:
     - name: Installing Nginx
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: present
         update_cache: yes
@@ -673,7 +673,7 @@ cat playbooks/handlers-01.yml
         - restart nginx
 
     - name: Installing nano
-      apt:
+      ansible.builtin.apt:
         name: nano
         state: present
         update_cache: yes
@@ -681,7 +681,7 @@ cat playbooks/handlers-01.yml
         - restart nginx
 
     - name: Installing Vim
-      apt:
+      ansible.builtin.apt:
         name: vim
         state: present
         update_cache: yes
@@ -690,7 +690,7 @@ cat playbooks/handlers-01.yml
 
   handlers:
     - name: restart nginx
-      service:
+      ansible.builtin.service:
         name: nginx
         state: restarted
 ```
@@ -705,7 +705,7 @@ cat playbooks/handlers-02-order.yml
   hosts: all
   tasks:
     - name: Installing Nginx
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: present
         update_cache: yes
@@ -714,17 +714,17 @@ cat playbooks/handlers-02-order.yml
         - second handler (Removing Nginx)
 
     - name: Task after handlers
-      debug:
+      ansible.builtin.debug:
         msg: "I was executed before handlers"
 
   handlers:
     - name: first handler (Restarting Nginx)
-      systemd:
+      ansible.builtin.systemd_service:
         name: nginx
         state: restarted
 
     - name: second handler (Removing Nginx)
-      apt:
+      ansible.builtin.apt:
         name: nginx
         state: absent
 ```
@@ -737,21 +737,21 @@ cat playbooks/register-01.yml
   hosts: web
   tasks:
     - name: Installing curl
-      apt:
+      ansible.builtin.apt:
         name: curl
         state: present
         update_cache: yes
 
     - name: curl httpbin.org API
-      shell:
+      ansible.builtin.shell:
         cmd: 'curl -X GET "https://httpbin.org/get" -H  "accept: application/json"'
       register: curl_output
     
     - name: curl request response
-      debug: var=curl_output.stdout_lines
+      ansible.builtin.debug: var=curl_output.stdout_lines
 
     - name: Removing curl
-      apt:
+      ansible.builtin.apt:
         name: curl
         state: absent
 ```
@@ -770,10 +770,11 @@ cat playbooks/variables-01-flag.yml
   hosts: server01
   tasks:
     - name: Display 1st variable
-      debug:
+      ansible.builtin.debug:
         msg: "{{ http_port }}"
+
     - name: Display 2nd variable
-      debug:
+      ansible.builtin.debug:
         msg: "{{ server_name }}"
 
 # To run the playbook with external variable file use -e flag
@@ -790,12 +791,14 @@ cat playbooks/variables-02-include.yml
     emoji: ":("
   tasks:
     - name: Display emoji variable
-      debug:
+      ansible.builtin.debug:
         msg: "{{ emoji }}"
+
     - name: include_vars
       include_vars: vars_files/emoji.yml
+
     - name: Display new emoji variable
-      debug:
+      ansible.builtin.debug:
         msg:  "{{ emoji }}"
 ```
 
@@ -820,10 +823,11 @@ cat playbooks/variables-04-file.yml
   hosts: server01
   tasks:
     - name: Display 1st variable
-      debug:
+      ansible.builtin.debug:
         msg: "{{ http_port }}"
+
     - name: Display 2nd variable
-      debug:
+      ansible.builtin.debug:
         msg: "{{ server_name }}"
 ```
 
@@ -839,7 +843,7 @@ cat playbooks/variables-05-vars.yml
     message: Hello world
   tasks:
   - name: Display value
-    debug:
+    ansible.builtin.debug:
       msg: "{{ message }}"
 ```
 ```
@@ -854,7 +858,7 @@ cat playbooks/variables-06-arrays.yml
       - vim
   tasks:
   - name: Display value
-    debug:
+    ansible.builtin.debug:
       msg: "{{ packages[0] }}"
 ```
 
@@ -887,7 +891,7 @@ cat playbooks/variables-07-group-host.yml
   hosts: all  
   tasks:
     - name: Display group and host variables
-      debug:
+      ansible.builtin.debug:
         msg: "{{ message }}"
 
 # Note: group_vars will overwrite host_vars
@@ -906,14 +910,14 @@ cat playbooks/loops-01.yml
       - tree
   tasks:
     - name: Installing software
-      apt:
+      ansible.builtin.apt:
         name: "{{ item  }}"
         state: present
         update_cache: yes
       loop: "{{ packages }}"
 
     - name: Uninstalling software
-      apt:
+      ansible.builtin.apt:
         name: "{{ item  }}"
         state: absent
       loop: "{{ packages }}"
@@ -934,13 +938,13 @@ cat playbooks/loops-02.yml
         group: "dev"
   tasks:
     - name: Group creation
-      group:
+      ansible.builtin.group:
         name: "{{ item }}"
         state: present
       loop: "{{ groups }}"
 
     - name: User creation
-      user:
+      ansible.builtin.user:
         name: "{{ item.name }}"
         state: present
         group: "{{ item.group }}"
@@ -953,7 +957,7 @@ cat playbooks/loops-03.yml
   hosts: db
   tasks:
     - name: Group creation
-      group:
+      ansible.builtin.group:
         name:  "{{ item }}"
         state: present
       loop:
@@ -961,7 +965,7 @@ cat playbooks/loops-03.yml
         - admin
 
     - name: User creation
-      user:
+      ansible.builtin.user:
         name: "{{ item.user }}"
         state: present
         name: "{{ item.group }}"
@@ -982,7 +986,7 @@ cat playbooks/facts-01.yml
   hosts: all
   tasks:
     - name: Display Ansible facts
-      debug:
+      ansible.builtin.debug:
         msg: "{{ ansible_fqdn }} {{ ansible_default_ipv4.address }} {{ ansible_memory_mb.real.total }}"
 ```
 ```
@@ -992,7 +996,7 @@ cat playbooks/facts-02.yml
   hosts: all
   tasks:
     - name: Display more Ansible facts
-      debug:
+      ansible.builtin.debug:
         msg: "{{ ansible_hostname }} has {{ ansible_memfree_mb }}Mb of free RAM & {{ ansible_processor_count }} CPU core(s)"
 ```
 
@@ -1004,7 +1008,7 @@ cat playbooks/conditionals-01.yml
   hosts: server01
   tasks:
     - name: Display message on condition
-      debug:
+      ansible.builtin.debug:
         msg: "Host is running Ubuntu distribution"
       when: ansible_distribution == "Ubuntu"
 ```
@@ -1021,7 +1025,7 @@ cat playbooks/conditionals-02.yml
       - CentOS
   tasks:
   - name: Install db
-    dnf:
+    ansible.builtin.dnf:
       name: mariadb
       state: latest
     when:
@@ -1029,13 +1033,13 @@ cat playbooks/conditionals-02.yml
       - ansible_distribution in supported_distros
 
   - name: "error: Not enough RAM"
-    debug:
+    ansible.builtin.debug:
       msg: "{{ inventory_hostname }} has {{ ansible_memtotal_mb }}Mb of total RAM and should have at least {{ min_ram_mb }}Mb"
     when:
       - ansible_memtotal_mb < min_ram_mb
 
   - name: "error: Unsupported distribution"
-    debug:
+    ansible.builtin.debug:
       msg: "{{ inventory_hostname }} distribution ({{ ansible_distribution }}) is not supported"
     when:
       - ansible_distribution not in supported_distros
@@ -1052,14 +1056,14 @@ cat playbooks/error-handling-01-failed.yml
     package: nginx
   tasks:
     - name: Trying to install {{ package }}
-      apt:
+      ansible.builtin.apt:
         name: "{{ package  }}"
         state: present
         update_cache: true
       failed_when: ansible_memfree_mb < 1000
 
     - name: Next Task
-      debug:
+      ansible.builtin.debug:
         msg: "Next next task will not be executed"
 
 # Next task will not be executed after previous task error
@@ -1073,7 +1077,7 @@ cat playbooks/error-handling-02-changed.yml
   hosts: server00
   tasks:
     - name: Time change
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/chrony/chrony.conf
         regexp: "^pool 2."
         line: "server base iburst"
@@ -1082,7 +1086,7 @@ cat playbooks/error-handling-02-changed.yml
 
   handlers:
     - name: restart chronyd
-      systemd:
+      ansible.builtin.systemd_service:
         name: chronyd
         state: restarted
 
@@ -1099,14 +1103,14 @@ cat playbooks/error-handling-03-ignore.yml
     package: nginxxx
   tasks:
     - name: Trying to install {{ package }}
-      apt:
+      ansible.builtin.apt:
         name: "{{ package  }}"
         state: present
         update_cache: true
       ignore_errors: true
     
     - name: Next Task
-      debug:
+      ansible.builtin.debug:
         msg: "Next task has been executed"
 
 # Next task will be executed even after previous task error
@@ -1123,21 +1127,21 @@ cat playbooks/blocks-01.yml
   tasks:
     - block:
         - name: Trying to install {{ package }}
-          apt:
+          ansible.builtin.apt:
             name: "{{ package  }}"
             state: present
             update_cache: true
       rescue:
         - name: Rescue block
-          debug:
+          ansible.builtin.debug:
             msg: "Executes on rescue, when task inside a block ends with an error!"
       always:
         - name: Always block
-          debug:
+          ansible.builtin.debug:
             msg: "I am always executing!"
 
     - name: Next task
-      debug:
+      ansible.builtin.debug:
         msg: "Next task was started..."
 ```
 
@@ -1165,7 +1169,7 @@ cat playbooks/templates-01.yml
   vars_files: vars_files/variables.yml
   tasks:
     - name: Template
-      template:
+      ansible.builtin.template:
         src: templates/template.j2
         dest: /tmp
         owner: root
@@ -1258,13 +1262,13 @@ cat roles/apache/tasks/main.yml
 ---
 # tasks file for apache
 - name: Installing Apache
-  apt:
+  ansible.builtin.apt:
     name: apache2
     state: latest
     update_cache: true
 
 - name: Creating HTML page
-  shell:
+  ansible.builtin.shell:
     cmd: echo "Hello From The Ansible" > /var/www/html/index.html
   args:
     executable: /bin/bash
@@ -1272,11 +1276,11 @@ cat roles/apache/tasks/main.yml
     - reload apache
 
 - name: Public IP
-  shell:
+  ansible.builtin.shell:
     cmd: ip -4 -br a
   register: ip
 
-- debug: var=ip.stdout_lines
+- ansible.builtin.debug: var=ip.stdout_lines
 
 cat roles/roles-01-apache.yml
 ---
@@ -1296,12 +1300,12 @@ cat roles/apache_cleanup/tasks/main.yml
 ---
 # tasks file for roles/apache_cleanup/tasks/main.yml
 - name: Uninstalling Apache
-  apt:
+  ansible.builtin.apt:
     name: apache2
     state: absent
 
 - name: Remove index.html
-  file:
+  ansible.builtin.file:
     path: /var/www/html/index.html
     state: absent
 

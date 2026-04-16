@@ -5,12 +5,12 @@
     package: nginx
   tasks:
     - name: Trying to install {{ package }}
-      apt:
+      ansible.builtin.apt:
         name: "{{ package  }}"
         state: present
         update_cache: true
       failed_when: ansible_memfree_mb < 1000
 
     - name: Next Task
-      debug:
+      ansible.builtin.debug:
         msg: "Next next task will not be executed"

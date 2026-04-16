@@ -2,7 +2,7 @@
 ---
 # tasks file for roles/db
 - name: Install db
-  apt:
+  ansible.builtin.apt:
     name: "{{ db_server }}"
     state: latest
     update_cache: true
@@ -10,5 +10,5 @@
     - start db
 
 - name: Display installed db name
-  debug:
+  ansible.builtin.debug:
     msg: "{{db_server}}"

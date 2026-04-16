@@ -9,7 +9,7 @@
       - CentOS
   tasks:
   - name: Install db
-    dnf:
+    ansible.builtin.dnf:
       name: mariadb
       state: latest
     when:
@@ -17,13 +17,13 @@
       - ansible_distribution in supported_distros
 
   - name: "error: Not enough RAM"
-    debug:
+    ansible.builtin.debug:
       msg: "{{ inventory_hostname }} has {{ ansible_memtotal_mb }}Mb of total RAM and should have at least {{ min_ram_mb }}Mb"
     when:
       - ansible_memtotal_mb < min_ram_mb
 
   - name: "error: Unsupported distribution"
-    debug:
+    ansible.builtin.debug:
       msg: "{{ inventory_hostname }} distribution ({{ ansible_distribution }}) is not supported"
     when:
       - ansible_distribution not in supported_distros

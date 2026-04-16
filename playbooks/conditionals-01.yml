@@ -3,6 +3,6 @@
   hosts: server01
   tasks:
     - name: Display message on condition
-      debug:
+      ansible.builtin.debug:
         msg: "Host is running Ubuntu distribution"
       when: ansible_distribution == "Ubuntu"

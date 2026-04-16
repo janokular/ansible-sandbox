@@ -5,8 +5,9 @@
   hosts: server01
   tasks:
     - name: Display 1st variable
-      debug:
+      ansible.builtin.debug:
         msg: "{{ http_port }}"
+
     - name: Display 2nd variable
-      debug:
+      ansible.builtin.debug:
         msg: "{{ server_name }}"

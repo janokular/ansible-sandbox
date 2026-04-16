@@ -3,7 +3,7 @@
   hosts: server00
   tasks:
     - name: Time change
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/chrony/chrony.conf
         regexp: "^pool 2."
         line: "server base iburst"
@@ -12,6 +12,6 @@
 
   handlers:
     - name: restart chronyd
-      systemd:
+      ansible.builtin.systemd_service:
         name: chronyd
         state: restarted

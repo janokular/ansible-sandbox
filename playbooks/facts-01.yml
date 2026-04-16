@@ -3,5 +3,5 @@
   hosts: all
   tasks:
     - name: Display Ansible facts
-      debug:
+      ansible.builtin.debug:
         msg: "{{ ansible_fqdn }} {{ ansible_default_ipv4.address }} {{ ansible_memory_mb.real.total }}"

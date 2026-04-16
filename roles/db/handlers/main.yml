@@ -2,6 +2,6 @@
 ---
 # handlers file for roles/db
 - name: start db
-  service:
+  ansible.builtin.service:
     name: "{{ db_server }}"
     state: started

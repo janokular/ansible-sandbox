@@ -3,5 +3,5 @@
   hosts: all
   tasks:
     - name: Display more Ansible facts
-      debug:
+      ansible.builtin.debug:
         msg: "{{ ansible_hostname }} has {{ ansible_memfree_mb }}Mb of free RAM & {{ ansible_processor_count }} CPU core(s)"

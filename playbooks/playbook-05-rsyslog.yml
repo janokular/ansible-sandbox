@@ -3,13 +3,13 @@
   hosts: all
   tasks:
     - name: Install rsyslog
-      apt:
+      ansible.builtin.apt:
         name: rsyslog
         state: latest
         update_cache: true
 
     - name: Start rsyslog
-      systemd:
+      ansible.builtin.systemd_service:
         name: rsyslog
         state: started
         enabled: true
@@ -18,7 +18,7 @@
   hosts: server00
   tasks:
     - name: Configure rsyslog
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/rsyslog.conf
         regexp: "{{ item.find }}"
         line: "{{ item.replace }}"
@@ -28,13 +28,13 @@
       notify: restart rsyslog
 
     - name: Install firewalld
-      apt:
+      ansible.builtin.apt:
         name: firewalld
         state: latest
         update_cache: true
 
     - name: Configure firewalld
-      firewalld:
+      ansible.posix.firewalld:
         port: 514/udp
         state: enabled
         permanent: true
@@ -42,7 +42,7 @@
 
   handlers:
     - name: restart rsyslog
-      systemd:
+      ansible.builtin.systemd_service:
         name: rsyslog
         state: restarted
 
@@ -52,13 +52,13 @@
     - server02
   tasks:
     - name: Edit rsyslog.conf
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/rsyslog.conf
         line: "*.* @172.16.10.10"
       notify: restart rsyslog
 
   handlers:
     - name: restart rsyslog
-      systemd:
+      ansible.builtin.systemd_service:
         name: rsyslog
         state: restarted

@@ -4,7 +4,7 @@
   vars_files: vars_files/variables.yml
   tasks:
     - name: Template
-      template:
+      ansible.builtin.template:
         src: templates/template.j2
         dest: /tmp
         owner: root

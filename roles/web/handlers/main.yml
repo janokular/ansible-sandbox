@@ -2,6 +2,6 @@
 ---
 # handlers file for roles/web_server
 - name: start web server
-  service:
+  ansible.builtin.service:
     name: apache2
     state: started

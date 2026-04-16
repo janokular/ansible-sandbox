@@ -3,7 +3,7 @@
   hosts: db
   tasks:
     - name: Group creation
-      group:
+      ansible.builtin.group:
         name:  "{{ item }}"
         state: present
       loop:
@@ -11,7 +11,7 @@
         - admin
 
     - name: User creation
-      user:
+      ansible.builtin.user:
         name: "{{ item.user }}"
         state: present
         name: "{{ item.group }}"

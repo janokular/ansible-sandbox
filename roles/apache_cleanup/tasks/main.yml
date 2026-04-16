@@ -2,11 +2,11 @@
 ---
 # tasks file for roles/apache_cleanup
 - name: Uninstalling Apache
-  apt:
+  ansible.builtin.apt:
     name: apache2
     state: absent
 
 - name: Remove index.html
-  file:
+  ansible.builtin.file:
     path: /var/www/html/index.html
     state: absent
